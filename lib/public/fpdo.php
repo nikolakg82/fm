@@ -60,6 +60,7 @@ class Fpdo extends Fmysql
      */
     public function fetch_count()
     {
+        //@TODO - ovo verovatno treba malo prepraviti, ako nema rezultat baca error
         return Finteger::convert_to_integer(Farray::reset($this->get_result()->fetch(PDO::FETCH_ASSOC)));
     }
 
