@@ -26,3 +26,4 @@ Floader::add_class('Fmysql',            FM_ABSTRACT . 'fmysql.php',         'abs
  */
 Floader::add_class('Fpdo',              FM_PUBLIC . 'fpdo.php',             'public',   'Fmysql');
 Floader::add_class('Fdb',               FM_PUBLIC . 'fdb.php',              'public');
+Floader::add_class('Response',          FM_PUBLIC . 'Response.php',         'public');
