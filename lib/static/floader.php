@@ -15,6 +15,8 @@ class Floader
      *                                          'path'  => 'putanja do fajla',
      *                                          'parent'=> 'Klasa koja se nasledjuje, ako postoji'
      *                                          'type'  => 'public|abstract'
+     *                                          'interfaces' => array() - niz sa nazivima interface-a
+     *                                          'traits'     => array() - niz sa nazivima trait-a
      *                                          ),
      *                  );
      */
@@ -39,8 +41,9 @@ class Floader
      * @param string $strClassType - Tip klase, podrzani tipovi static|public|abstract
      * @param null $strClassParent
      * @throws Exception
+     * @TODO treba napravititi da klase moze da ima i interface i trait, u oba slucaja treba raditi include tog fajla, (regystry interfae i traits-a ??)
      */
-    public static function add_class($strClassName, $strClassPath, $strClassType = 'static', $strClassParent = null)
+    public static function add_class($strClassName, $strClassPath, $strClassType = 'static', $strClassParent = null, $arrInterfaces = [], $arrTraits = [])
     {
         if($strClassType == 'static' || $strClassType == 'public' || $strClassType == 'abstract')
         {
@@ -56,7 +59,7 @@ class Floader
                 if(self::issset_class($strClassName))
                     throw new Exception("Klasa $strClassName je vec registrovana i ne moze se ponovo registrovati");
 
-                self::$class_data[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent, 'type' => $strClassType);
+                self::$class_data[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent, 'type' => $strClassType, 'interfaces' => $arrInterfaces, 'traits' => $arrTraits);
             }
             else
             {
@@ -111,6 +114,7 @@ class Floader
      *
      * @param string $strClassName - Naziv klase
      * @throws Exception
+     * @return object
      */
     public static function load($strClassName)
     {
@@ -120,8 +124,16 @@ class Floader
         if(isset(self::$class_data[$strClassName]['parent']))
             self::load(self::$class_data[$strClassName]['parent']);
 
+        if(!empty(self::$class_data[$strClassName]['interfaces']))
+        {
+            foreach (self::$class_data[$strClassName]['interfaces'] as $strInterfaceName)
+                InterfaceLoader::load($strInterfaceName);
+        }
+
         FM::includer(self::$class_data[$strClassName]['path']);
 
+        //@TODO proveri da li treba da ide istanciranje uvek ili samo trazene klase, ako se extenduje klasa koja nije
+        // abstraktna onda ce da se istancira i ona kao prant klasa sto u sustini i nije potrebno
         if(self::$class_data[$strClassName]['type'] == 'public')
             return new $strClassName();
     }

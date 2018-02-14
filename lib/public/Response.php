@@ -23,7 +23,9 @@ class Response
     }
 
     /**
-     * @param int $statusCode
+     * @param int $intResponseCode
+     *
+     * @return Response
      */
     public function setResponseCode($intResponseCode)
     {
@@ -41,7 +43,9 @@ class Response
     }
 
     /**
-     * @param mixed $data
+     * @param mixed
+     *
+     * @return Response
      */
     public function setData($data)
     {
@@ -60,6 +64,8 @@ class Response
 
     /**
      * @param mixed $templatePath
+     *
+     * @return Response
      */
     public function setTemplatePath($templatePath)
     {
@@ -67,9 +73,4 @@ class Response
 
         return $this;
     }
-
-//    public function __construct()
-//    {
-//
-//    }
 }

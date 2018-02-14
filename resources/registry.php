@@ -11,10 +11,14 @@
  */
 Floader::add_class('Fstring',           FM_STATIC . 'fstring.php');
 Floader::add_class('Finteger',          FM_STATIC . 'finteger.php');
-Floader::add_class('Ffile',             FM_STATIC . 'ffile.php');
+Floader::add_class('File',             FM_STATIC . 'File.php');
 Floader::add_class('Fimage',            FM_STATIC . 'fimage.php');
 Floader::add_class('Farray',            FM_STATIC . 'farray.php');
 Floader::add_class('Ffetch',            FM_STATIC . 'ffetch.php');
+Floader::add_class('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
+
+//Load staticnih klasa
+Floader::load_static_class();
 
 /**
  * Abstraktne klase

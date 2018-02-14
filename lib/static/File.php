@@ -6,12 +6,12 @@
  * Date: 4/21/2016
  * Time: 2:44 PM
  */
-class Ffile
+class File
 {
     public static function unlink($strPath, $mixContext = null)
     {
         $intReturn = 1;
-        if(self::file_exists($strPath))
+        if(self::exists($strPath))
         {
             if(unlink($strPath, $mixContext))
                 $intReturn = 2;
@@ -22,7 +22,7 @@ class Ffile
         return $intReturn;
     }
 
-    public static function file_exists($strPath)
+    public static function exists($strPath)
     {
         return file_exists($strPath);
     }
@@ -78,7 +78,7 @@ class Ffile
     {
         $mixReturn = null;
 
-        if(self::file_exists($strPath))
+        if(self::exists($strPath))
             $mixReturn = file_get_contents($strPath);
         return $mixReturn;
     }
