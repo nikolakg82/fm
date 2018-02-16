@@ -6,6 +6,9 @@
  * Date: 4/21/2016
  * Time: 2:44 PM
  */
+
+namespace fm\lib\help;
+
 class File
 {
     public static function unlink($strPath, $mixContext = null)
@@ -32,7 +35,7 @@ class File
         return mkdir($strPath, $intPermission, $boolRecursive, $mixContext);
     }
 
-    public static function move_uploaded_file($strTmpName, $strPath)
+    public static function moveUploadedFile($strTmpName, $strPath)
     {
         return move_uploaded_file($strTmpName, $strPath);
     }
@@ -64,7 +67,7 @@ class File
         return $arrData;
     }
 
-    public static function is_dir($strPath)
+    public static function isDir($strPath)
     {
         return is_dir($strPath);
     }
@@ -74,7 +77,7 @@ class File
         return chmod($strPath, $intMode);
     }
 
-    public static function file_get_contents($strPath)
+    public static function fileGetContents($strPath)
     {
         $mixReturn = null;
 

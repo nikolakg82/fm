@@ -5,17 +5,19 @@
  * Date: 4/29/2016
  * Time: 7:37 PM
  */
+use fm\lib\help\Floader;
 
 /**
  * Staticne klase
  */
-Floader::add_class('Fstring',           FM_STATIC . 'fstring.php');
-Floader::add_class('Finteger',          FM_STATIC . 'finteger.php');
-Floader::add_class('File',             FM_STATIC . 'File.php');
-Floader::add_class('Fimage',            FM_STATIC . 'fimage.php');
-Floader::add_class('Farray',            FM_STATIC . 'farray.php');
-Floader::add_class('Ffetch',            FM_STATIC . 'ffetch.php');
+Floader::add_class('Stringer',          FM_STATIC . 'Stringer.php');
+Floader::add_class('Numeric',          FM_STATIC . 'Numeric.php');
+Floader::add_class('File',              FM_STATIC . 'File.php');
+Floader::add_class('Image',            FM_STATIC . 'Image.php');
+Floader::add_class('Arrays',            FM_STATIC . 'Arrays.php');
+Floader::add_class('Request',            FM_STATIC . 'Request.php');
 Floader::add_class('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
+Floader::add_class('TraitLoader',       FM_STATIC . 'TraitLoader.php');
 
 //Load staticnih klasa
 Floader::load_static_class();

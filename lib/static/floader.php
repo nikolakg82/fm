@@ -1,11 +1,14 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: Nikola
  * Date: 4/29/2016
  * Time: 7:36 PM
  */
+namespace fm\lib\help;
+
+use fm\FM;
+
 class Floader
 {
     /**
@@ -48,7 +51,7 @@ class Floader
         if($strClassType == 'static' || $strClassType == 'public' || $strClassType == 'abstract')
         {
             if(!file_exists($strClassPath))
-                throw new Exception("Fajl $strClassPath ne postoji, $strClassName klasa se ne moze registrovati");
+                throw new \Exception("Fajl $strClassPath ne postoji, $strClassName klasa se ne moze registrovati");
 
 
             if($strClassType == 'public' || $strClassType == 'abstract')
@@ -113,13 +116,13 @@ class Floader
      * Includovanje klase
      *
      * @param string $strClassName - Naziv klase
-     * @throws Exception
+     * @throws \Exception
      * @return object
      */
     public static function load($strClassName)
     {
         if(!self::issset_class($strClassName))
-            throw new Exception("Klasa $strClassName nije registrovana, klase se ne moze includovati");
+            throw new \Exception("Klasa $strClassName nije registrovana, klase se ne moze includovati");
 
         if(isset(self::$class_data[$strClassName]['parent']))
             self::load(self::$class_data[$strClassName]['parent']);
@@ -128,6 +131,12 @@ class Floader
         {
             foreach (self::$class_data[$strClassName]['interfaces'] as $strInterfaceName)
                 InterfaceLoader::load($strInterfaceName);
+        }
+
+        if(!empty(self::$class_data[$strClassName]['traits']))
+        {
+            foreach (self::$class_data[$strClassName]['traits'] as $strTraitName)
+                TraitLoader::load($strTraitName);
         }
 
         FM::includer(self::$class_data[$strClassName]['path']);
