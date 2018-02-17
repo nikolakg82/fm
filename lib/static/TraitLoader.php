@@ -1,10 +1,16 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Nikola
  * Date: 2/16/2018
  * Time: 1:40 PM
  */
+
+namespace fm\lib\help;
+
+use fm\FM;
+
 class TraitLoader
 {
     /**
@@ -21,16 +27,16 @@ class TraitLoader
     public static function addItem($strName, $strPath)
     {
         if(!isset($strName))
-            throw new Exception("Please forward trait name");
+            throw new \Exception("Please forward trait name");
 
         if(self::issetItem($strName))
-            throw new Exception("Trait $strName already exist. Trait can't registry.");
+            throw new \Exception("Trait $strName already exist. Trait can't registry.");
 
         if(!isset($strPath))
-            throw new Exception("Please forward trait file path");
+            throw new \Exception("Please forward trait file path");
 
         if(!file_exists($strPath))
-            throw new Exception("Trait $strName on path $strPath not exist");
+            throw new \Exception("Trait $strName on path $strPath not exist");
 
         self::$data[$strName]['path'] = $strPath;
     }
@@ -38,7 +44,7 @@ class TraitLoader
     public static function load($strName)
     {
         if(!self::issetItem($strName))
-            throw new Exception("Trait $strName not exist. Can't load interface.");
+            throw new \Exception("Trait $strName not exist. Can't load interface.");
 
         FM::includer(self::$data[$strName]['path']);
     }

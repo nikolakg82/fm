@@ -30,7 +30,7 @@ class File
         return file_exists($strPath);
     }
 
-    public static function mkdir($strPath, $intPermission = "0777", $boolRecursive = false, $mixContext = null)
+    public static function makeDir($strPath, $intPermission = "0777", $boolRecursive = false, $mixContext = null)
     {
         return mkdir($strPath, $intPermission, $boolRecursive, $mixContext);
     }
@@ -50,12 +50,13 @@ class File
         return rename($strOldPath, $strNewPath, $mixContext);
     }
 
-    public static function scandir($strPath, $intSort = SCANDIR_SORT_ASCENDING, $mixContext = null)
+    public static function scanDir($strPath, $intSort = SCANDIR_SORT_ASCENDING, $mixContext = null)
     {
         $arrData = null;
 
         $arrDataTemp = scandir($strPath, $intSort, $mixContext);
-        if(FM::is_variable($arrDataTemp))
+
+        if(isset($arrDataTemp))
         {
             foreach($arrDataTemp as $key => $val)
             {
@@ -83,6 +84,7 @@ class File
 
         if(self::exists($strPath))
             $mixReturn = file_get_contents($strPath);
+
         return $mixReturn;
     }
 }

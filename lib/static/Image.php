@@ -9,8 +9,6 @@
 
 namespace fm\lib\help;
 
-use fm\FM;
-
 class Image
 {
     public static function getImageSize($strPath, $mixImageInfo = null)
@@ -21,7 +19,7 @@ class Image
         {
             $arrData = getimagesize($strPath, $mixImageInfo);
 
-            if(FM::is_variable($arrData))
+            if(isset($arrData))
             {
                 $mixReturn['width'] = $arrData[0];
                 $mixReturn['height'] = $arrData[1];
@@ -77,10 +75,10 @@ class Image
 
         $arrImageData = self::getImageSize($strSourcePath);
 
-        if(FM::is_variable($arrImageData))
+        if(isset($arrImageData))
         {
-            if(!(FM::is_variable($arrPosition)))
-                $arrPosition = self::create_crop_position($arrImageData['width'], $arrImageData['height'], $intCropWidth, $intCropHeight);
+            if(!(isset($arrPosition)))
+                $arrPosition = self::createCropPosition($arrImageData['width'], $arrImageData['height'], $intCropWidth, $intCropHeight);
 
             $intReturn = self::createImage($strDestinationFolder, $strFileName, $strSourcePath, $arrImageData['type'], $intCropWidth, $intCropHeight, $arrPosition['start_x'],
                                                 $arrPosition['start_y'], $arrPosition['end_x'], $arrPosition['end_y']);
@@ -112,14 +110,14 @@ class Image
             $tempWidth = $intCropWidth * $ratio;
             $tempHeight = $intCropHeight * $ratio;
 
-            $tempWidth = Numeric::intval($tempWidth);
-            $tempHeight = Numeric::intval($tempHeight);
+            $tempWidth = Numeric::intVal($tempWidth);
+            $tempHeight = Numeric::intVal($tempHeight);
 
             $tempStartPositionX = ($intImageWidth - $tempWidth) / 2;
             $tempStartPositionY = ($intImageHeight - $tempHeight) / 2;
 
-            $arrReturn['start_x'] = Numeric::intval($tempStartPositionX);
-            $arrReturn['start_y'] = Numeric::intval($tempStartPositionY);
+            $arrReturn['start_x'] = Numeric::intVal($tempStartPositionX);
+            $arrReturn['start_y'] = Numeric::intVal($tempStartPositionY);
 
             $arrReturn['end_x'] = $tempWidth;
             $arrReturn['end_y'] = $tempHeight;

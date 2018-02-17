@@ -26,7 +26,7 @@ class Arrays
         return serialize($arrData);
     }
 
-    public static function unserialize($strData)
+    public static function unSerialize($strData)
     {
         return unserialize($strData);
     }

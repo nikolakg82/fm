@@ -5,31 +5,34 @@
  * Date: 4/29/2016
  * Time: 7:37 PM
  */
-use fm\lib\help\Floader;
+
+use fm\lib\help\ClassLoader, fm\lib\help\InterfaceLoader;
 
 /**
  * Staticne klase
  */
-Floader::add_class('Stringer',          FM_STATIC . 'Stringer.php');
-Floader::add_class('Numeric',          FM_STATIC . 'Numeric.php');
-Floader::add_class('File',              FM_STATIC . 'File.php');
-Floader::add_class('Image',            FM_STATIC . 'Image.php');
-Floader::add_class('Arrays',            FM_STATIC . 'Arrays.php');
-Floader::add_class('Request',            FM_STATIC . 'Request.php');
-Floader::add_class('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
-Floader::add_class('TraitLoader',       FM_STATIC . 'TraitLoader.php');
+ClassLoader::addClass('Stringer',          FM_STATIC . 'Stringer.php');
+ClassLoader::addClass('Numeric',          FM_STATIC . 'Numeric.php');
+ClassLoader::addClass('File',              FM_STATIC . 'File.php');
+ClassLoader::addClass('Image',            FM_STATIC . 'Image.php');
+ClassLoader::addClass('Arrays',            FM_STATIC . 'Arrays.php');
+ClassLoader::addClass('Request',            FM_STATIC . 'Request.php');
+ClassLoader::addClass('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
+ClassLoader::addClass('TraitLoader',       FM_STATIC . 'TraitLoader.php');
 
 //Load staticnih klasa
-Floader::load_static_class();
+ClassLoader::loadStaticClass();
+
+InterfaceLoader::addItem('DatabaseEngine', FM_INTERFACE . 'DatabaseEngine.php');
 
 /**
  * Abstraktne klase
  */
-Floader::add_class('Fmysql',            FM_ABSTRACT . 'fmysql.php',         'abstract');
+ClassLoader::addClass('Database',            FM_ABSTRACT . 'Database.php',         'abstract', null, ['DatabaseEngine']);
 
 /**
  * Public klase
  */
-Floader::add_class('Fpdo',              FM_PUBLIC . 'fpdo.php',             'public',   'Fmysql');
-Floader::add_class('Fdb',               FM_PUBLIC . 'fdb.php',              'public');
-Floader::add_class('Response',          FM_PUBLIC . 'Response.php',         'public');
+ClassLoader::addClass('DatabasePdoEngine',              FM_PUBLIC . 'DatabasePdoEngine.php',             'public',   'Database');
+ClassLoader::addClass('DatabaseEngine',               FM_PUBLIC . 'fdb.php',              'public');
+ClassLoader::addClass('Response',          FM_PUBLIC . 'Response.php',         'public');

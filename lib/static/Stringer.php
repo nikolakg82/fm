@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Nikola
@@ -8,17 +9,14 @@
 
 namespace fm\lib\help;
 
-/**
- * Class Stringer
- */
 class Stringer
 {
     public static function truncate($strString, $intLength, $strEnd = "...")
     {
-        return self::substr($strString, 0, $intLength) . $strEnd;
+        return self::subStr($strString, 0, $intLength) . $strEnd;
     }
 
-    public static function substr($strString, $intStart, $intLength)
+    public static function subStr($strString, $intStart, $intLength)
     {
         return substr($strString, $intStart, $intLength);
     }
@@ -33,7 +31,7 @@ class Stringer
         return explode($strDelimiter, $strString, $mixLimit);
     }
 
-    public static function strlen($strString)
+    public static function strCount($strString)
     {
         return strlen($strString);
     }
@@ -63,7 +61,7 @@ class Stringer
         return is_string($mixValue);
     }
 
-    public static function strval($mixValue)
+    public static function strVal($mixValue)
     {
         return strval($mixValue);
     }

@@ -6,6 +6,9 @@
  * Date: 2/11/2018
  * Time: 6:13 PM
  */
+
+namespace fm\lib\publisher;
+
 class Response
 {
     protected $responseCode = 200;

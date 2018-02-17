@@ -14,7 +14,7 @@ class Numeric
         return is_numeric($mixValue);
     }
 
-    public static function intval($mixValue, $intBase = 10)
+    public static function intVal($mixValue, $intBase = 10)
     {
         return intval($mixValue, $intBase);
     }

@@ -6,12 +6,17 @@
  * Date: 4/30/2016
  * Time: 3:12 PM
  */
-class Fdb
+
+namespace fm\lib\publisher;
+
+use fm\lib\help\ClassLoader;
+
+class DatabaseEngine
 {
     /**
-     * @var db_object - Objekat koji se kaci na bazu
+     * @var \fm\lib\interfaces\DatabaseEngine
      */
-    private $db_object;
+    protected $engine;
 
     /**
      * Izvrsava upit na bazu, poziva metode prepare i execute
@@ -21,8 +26,8 @@ class Fdb
      */
     public function query($strQuery, $mixStatments = null)
     {
-        $this->db_object->prepare($strQuery);
-        $this->db_object->execute($mixStatments);
+        $this->engine->prepare($strQuery);
+        $this->engine->execute($mixStatments);
     }
 
     /**
@@ -35,16 +40,16 @@ class Fdb
      */
     public function fetch($strFetchMode = FM_FETCH_ASSOC, $boolAll = true)
     {
-        return $this->db_object->fetch($strFetchMode, $boolAll);
+        return $this->engine->fetch($strFetchMode, $boolAll);
     }
 
     /**
      * Koristi se kad se radi SELECT count(id), da vrati broj rezultata
      * @return int|null
      */
-    public function fetch_count()
+    public function fetchCount()
     {
-        return $this->db_object->fetch_count();
+        return $this->engine->fetchCount();
     }
 
     /**
@@ -52,7 +57,7 @@ class Fdb
      */
     public function free()
     {
-        $this->db_object->free();
+        $this->engine->free();
     }
 
     /**
@@ -60,9 +65,9 @@ class Fdb
      *
      * @return mixed
      */
-    public function last_insert_id()
+    public function lastInsertId()
     {
-        return $this->db_object->last_insert_id();
+        return $this->engine->lastInsertId();
     }
 
     /**
@@ -70,9 +75,9 @@ class Fdb
      *
      * @return mixed
      */
-    public function row_count()
+    public function rowCount()
     {
-        return $this->db_object->row_count();
+        return $this->engine->rowCount();
     }
 
     /**
@@ -82,22 +87,22 @@ class Fdb
      */
     public function connect($arrConnectData)
     {
-        $this->db_object->set_host($arrConnectData['host']);
-        $this->db_object->set_username($arrConnectData['username']);
-        $this->db_object->set_password($arrConnectData['password']);
-        $this->db_object->set_name($arrConnectData['name']);
-        $this->db_object->connect();
+        $this->engine->setHost($arrConnectData['host']);
+        $this->engine->setUsername($arrConnectData['username']);
+        $this->engine->setPassword($arrConnectData['password']);
+        $this->engine->setName($arrConnectData['name']);
+        $this->engine->connect();
     }
 
     /**
      * Fdb constructor., proverava da li je instaliran PDO na serveru, ako jeste pravi PDO instancu
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
         if (defined('PDO::ATTR_DRIVER_NAME'))
-            $this->db_object = Floader::load('Fpdo');
+            $this->engine = ClassLoader::load('DatabasePdoEngine');
         else
-            throw new Exception("PDO nije instaliran, konekcija na bazu nije moguca");
+            throw new \Exception("PDO nije instaliran, konekcija na bazu nije moguca");
     }
 }

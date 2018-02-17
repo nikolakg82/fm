@@ -13,7 +13,7 @@
 namespace fm;
 
 use fm\lib\help\Arrays;
-use fm\lib\help\Floader;
+use fm\lib\help\ClassLoader;
 use fm\lib\help\Numeric;
 use fm\lib\help\Request;
 use fm\lib\help\Stringer;
@@ -142,7 +142,7 @@ class FM
 define('FM_ROOT', realpath(dirname(__FILE__)) . '/');
 
 FM::includer(FM_ROOT . 'resources/constants.php');
-FM::includer(FM_STATIC . 'floader.php');
+FM::includer(FM_STATIC . 'ClassLoader.php');
 FM::includer(FM_RESOURCES . 'registry.php');
 
-Floader::load_static_class();
+ClassLoader::loadStaticClass();

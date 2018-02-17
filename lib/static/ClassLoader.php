@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Nikola
@@ -9,7 +10,7 @@ namespace fm\lib\help;
 
 use fm\FM;
 
-class Floader
+class ClassLoader
 {
     /**
      * @var array - Registar klasa
@@ -23,7 +24,7 @@ class Floader
      *                                          ),
      *                  );
      */
-    private static $class_data;
+    protected static $classData;
 
     /**
      * @var - Registar staticnih klasa
@@ -34,19 +35,20 @@ class Floader
      *                                          ),
      *                  );
      */
-    private static $static_class;
+    protected static $staticClass;
 
     /**
-     * Dodavanje klase
+     * Add class to registry
      *
-     * @param string $strClassName - Naziv klase
-     * @param string $strClassPath - Putanja do klase
-     * @param string $strClassType - Tip klase, podrzani tipovi static|public|abstract
+     * @param $strClassName - Class name
+     * @param $strClassPath - Path to class file
+     * @param string $strClassType - Type of class (static|public|abstract)
      * @param null $strClassParent
-     * @throws Exception
-     * @TODO treba napravititi da klase moze da ima i interface i trait, u oba slucaja treba raditi include tog fajla, (regystry interfae i traits-a ??)
+     * @param array $arrInterfaces
+     * @param array $arrTraits
+     * @throws \Exception
      */
-    public static function add_class($strClassName, $strClassPath, $strClassType = 'static', $strClassParent = null, $arrInterfaces = [], $arrTraits = [])
+    public static function addClass($strClassName, $strClassPath, $strClassType = 'static', $strClassParent = null, $arrInterfaces = [], $arrTraits = [])
     {
         if($strClassType == 'static' || $strClassType == 'public' || $strClassType == 'abstract')
         {
@@ -56,27 +58,27 @@ class Floader
 
             if($strClassType == 'public' || $strClassType == 'abstract')
             {
-                if(FM::is_variable($strClassParent) && !(self::issset_class($strClassParent)))
-                    throw new Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
+                if(isset($strClassParent) && !(self::existClass($strClassParent)))
+                    throw new \Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
 
-                if(self::issset_class($strClassName))
-                    throw new Exception("Klasa $strClassName je vec registrovana i ne moze se ponovo registrovati");
+                if(self::existClass($strClassName))
+                    throw new \Exception("Klasa $strClassName je vec registrovana i ne moze se ponovo registrovati");
 
-                self::$class_data[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent, 'type' => $strClassType, 'interfaces' => $arrInterfaces, 'traits' => $arrTraits);
+                self::$classData[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent, 'type' => $strClassType, 'interfaces' => $arrInterfaces, 'traits' => $arrTraits);
             }
             else
             {
-                if(FM::is_variable($strClassParent) && !(self::isset_static_class($strClassParent)))
-                    throw new Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
+                if(isset($strClassParent) && !(self::existStaticClass($strClassParent)))
+                    throw new \Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
 
-                if(self::isset_static_class($strClassName))
-                    throw new Exception("Staticna klasa $strClassName je vec registrovana i nemo ze se ponovo registrovati");
+                if(self::existStaticClass($strClassName))
+                    throw new \Exception("Staticna klasa $strClassName je vec registrovana i nemo ze se ponovo registrovati");
 
-                self::$static_class[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent);
+                self::$staticClass[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent);
             }
         }
         else
-            throw new Exception("Tip klase $strClassType nije podrzan, porzani tipovi su static|public");
+            throw new \Exception("Tip klase $strClassType nije podrzan, porzani tipovi su static|public");
 
     }
 
@@ -86,11 +88,11 @@ class Floader
      * @param string $strClassName - Naziv klase
      * @return bool - Status
      */
-    public static function issset_class($strClassName)
+    public static function existClass($strClassName)
     {
         $boolStatus = false;
 
-        if(isset(self::$class_data[$strClassName]))
+        if(isset(self::$classData[$strClassName]))
             $boolStatus = true;
 
         return $boolStatus;
@@ -102,11 +104,11 @@ class Floader
      * @param string $strClassName - Naziv klase
      * @return bool - Status
      */
-    public static function isset_static_class($strClassName)
+    public static function existStaticClass($strClassName)
     {
         $boolStatus = false;
 
-        if(isset(self::$static_class[$strClassName]))
+        if(isset(self::$staticClass[$strClassName]))
             $boolStatus = true;
 
         return $boolStatus;
@@ -121,29 +123,29 @@ class Floader
      */
     public static function load($strClassName)
     {
-        if(!self::issset_class($strClassName))
+        if(!self::existClass($strClassName))
             throw new \Exception("Klasa $strClassName nije registrovana, klase se ne moze includovati");
 
-        if(isset(self::$class_data[$strClassName]['parent']))
-            self::load(self::$class_data[$strClassName]['parent']);
+        if(isset(self::$classData[$strClassName]['parent']))
+            self::load(self::$classData[$strClassName]['parent']);
 
-        if(!empty(self::$class_data[$strClassName]['interfaces']))
+        if(!empty(self::$classData[$strClassName]['interfaces']))
         {
-            foreach (self::$class_data[$strClassName]['interfaces'] as $strInterfaceName)
+            foreach (self::$classData[$strClassName]['interfaces'] as $strInterfaceName)
                 InterfaceLoader::load($strInterfaceName);
         }
 
-        if(!empty(self::$class_data[$strClassName]['traits']))
+        if(!empty(self::$classData[$strClassName]['traits']))
         {
-            foreach (self::$class_data[$strClassName]['traits'] as $strTraitName)
+            foreach (self::$classData[$strClassName]['traits'] as $strTraitName)
                 TraitLoader::load($strTraitName);
         }
 
-        FM::includer(self::$class_data[$strClassName]['path']);
+        FM::includer(self::$classData[$strClassName]['path']);
 
         //@TODO proveri da li treba da ide istanciranje uvek ili samo trazene klase, ako se extenduje klasa koja nije
         // abstraktna onda ce da se istancira i ona kao prant klasa sto u sustini i nije potrebno
-        if(self::$class_data[$strClassName]['type'] == 'public')
+        if(self::$classData[$strClassName]['type'] == 'public')
             return new $strClassName();
     }
 
@@ -151,14 +153,14 @@ class Floader
      * Includovanje staticnih klasa iz registra
      *
      */
-    public static function load_static_class()
+    public static function loadStaticClass()
     {
-        if(FM::is_variable(self::$static_class))
+        if(isset(self::$staticClass))
         {
-            foreach(self::$static_class as $key => $val)
+            foreach(self::$staticClass as $key => $val)
                 FM::includer($val['path']);
 
-            self::$static_class = null;
+            self::$staticClass = null;
         }
     }
 }
