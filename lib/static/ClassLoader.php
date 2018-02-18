@@ -145,6 +145,7 @@ class ClassLoader
 
         //@TODO proveri da li treba da ide istanciranje uvek ili samo trazene klase, ako se extenduje klasa koja nije
         // abstraktna onda ce da se istancira i ona kao prant klasa sto u sustini i nije potrebno
+
         if(self::$classData[$strClassName]['type'] == 'public')
             return new $strClassName();
     }

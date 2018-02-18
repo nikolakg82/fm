@@ -101,7 +101,7 @@ class DatabaseEngine
     public function __construct()
     {
         if (defined('PDO::ATTR_DRIVER_NAME'))
-            $this->engine = ClassLoader::load('DatabasePdoEngine');
+            $this->engine = ClassLoader::load('fm\lib\publisher\DatabasePdoEngine');
         else
             throw new \Exception("PDO nije instaliran, konekcija na bazu nije moguca");
     }
