@@ -35,4 +35,4 @@ ClassLoader::addClass('Database',            FM_ABSTRACT . 'Database.php',      
  */
 ClassLoader::addClass('fm\lib\publisher\DatabasePdoEngine',              FM_PUBLIC . 'DatabasePdoEngine.php',             'public',   'Database');
 ClassLoader::addClass('fm\lib\publisher\DatabaseEngine',               FM_PUBLIC . 'DatabaseEngine.php',              'public');
-ClassLoader::addClass('Response',          FM_PUBLIC . 'Response.php',         'public');
+ClassLoader::addClass('fm\lib\publisher\Response',          FM_PUBLIC . 'Response.php',         'public');
