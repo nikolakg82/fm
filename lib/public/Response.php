@@ -9,6 +9,10 @@
 
 namespace fm\lib\publisher;
 
+use cms\CMS;
+use cms\lib\help\ControllerLoader;
+use cms\lib\help\Lang;
+
 class Response
 {
     protected $responseCode = 200;
@@ -75,5 +79,13 @@ class Response
         $this->templatePath = $templatePath;
 
         return $this;
+    }
+
+    public function showView()
+    {
+        CMS::$view->assign('data', $this->getData());
+        CMS::$view->display($this->getTemplatePath());
+
+        CMS::$view->show();
     }
 }

@@ -14,6 +14,7 @@
     define('FM_INTERFACE',      FM_LIB          . "interface/");
 
     define('FM_RESOURCES',      FM_ROOT         . "resources/");
+    define('FM_CONFIG',         FM_ROOT         . "config/");
 
 /**
  *  Tipovi varijabli
