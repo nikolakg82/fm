@@ -19,6 +19,7 @@ ClassLoader::addClass('Arrays',            FM_STATIC . 'Arrays.php');
 ClassLoader::addClass('Request',            FM_STATIC . 'Request.php');
 ClassLoader::addClass('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
 ClassLoader::addClass('TraitLoader',       FM_STATIC . 'TraitLoader.php');
+ClassLoader::addClass('Router',             FM_STATIC . 'Router.php');
 
 //Load staticnih klasa
 ClassLoader::loadStaticClass();

@@ -28,8 +28,8 @@
 /**
  * Hederi
  */
-    define('FM_POST',           'post');
-    define('FM_GET',            'get');
+    define('FM_POST',           'POST');
+    define('FM_GET',            'GET');
     define('FM_COOKIE',         'cookie');
     define('FM_SESSION',        'session');
     define('FM_FILES',          'files');
