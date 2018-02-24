@@ -6,42 +6,47 @@
  * Date: 4/28/2016
  * Time: 12:23 PM
  */
-abstract class Fmysql
+
+namespace fm\lib\abstracts;
+
+use fm\lib\interfaces\DatabaseEngine;
+
+abstract class Database implements DatabaseEngine
 {
     /**
      * @var - MYSQL host name
      */
-    private $host;
+    protected $host;
 
     /**
      * @var - Naziv baze
      */
-    private $name;
+    protected $name;
 
     /**
      * @var - Korisnicko ime
      */
-    private $username;
+    protected $username;
 
     /**
      * @var - Sifra
      */
-    private $password;
+    protected $password;
 
     /**
      * @var - Istanca konekcija na bazu
      */
-    private $connection;
+    protected $connection;
 
     /**
      * @var string - Karakter set
      */
-    private $charset = "utf8";
+    protected $charset = "utf8";
 
     /**
      * @var - Rezultat upita
      */
-    private $result;
+    protected $result;
 
 
     /**
@@ -49,7 +54,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_host()
+    public function getHost()
     {
         return $this->host;
     }
@@ -59,7 +64,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_name()
+    public function getName()
     {
         return $this->name;
     }
@@ -69,7 +74,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_username()
+    public function getUsername()
     {
         return $this->username;
     }
@@ -79,7 +84,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_password()
+    public function getPassword()
     {
         return $this->password;
     }
@@ -89,7 +94,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_connection()
+    public function getConnection()
     {
         return $this->connection;
     }
@@ -99,7 +104,7 @@ abstract class Fmysql
      *
      * @return string
      */
-    public function get_charset()
+    public function getCharset()
     {
         return $this->charset;
     }
@@ -109,7 +114,7 @@ abstract class Fmysql
      *
      * @return mixed
      */
-    public function get_result()
+    public function getResult()
     {
         return $this->result;
     }
@@ -120,7 +125,7 @@ abstract class Fmysql
      *
      * @param $strHost
      */
-    public function set_host($strHost)
+    public function setHost($strHost)
     {
         $this->host = $strHost;
     }
@@ -130,7 +135,7 @@ abstract class Fmysql
      *
      * @param $strName
      */
-    public function set_name($strName)
+    public function setName($strName)
     {
         $this->name = $strName;
     }
@@ -140,7 +145,7 @@ abstract class Fmysql
      *
      * @param $strUsername
      */
-    public function set_username($strUsername)
+    public function setUsername($strUsername)
     {
         $this->username = $strUsername;
     }
@@ -150,7 +155,7 @@ abstract class Fmysql
      *
      * @param $strPassword
      */
-    public function set_password($strPassword)
+    public function setPassword($strPassword)
     {
         $this->password = $strPassword;
     }
@@ -160,7 +165,7 @@ abstract class Fmysql
      *
      * @param $strCharset
      */
-    public function set_charset($strCharset)
+    public function setCharset($strCharset)
     {
         $this->charset = $strCharset;
     }
@@ -170,7 +175,7 @@ abstract class Fmysql
      *
      * @param $mixData
      */
-    public function set_result($mixData)
+    public function setResult($mixData)
     {
         $this->result = $mixData;
     }
@@ -180,7 +185,7 @@ abstract class Fmysql
      *
      * @param $objConnection
      */
-    public function set_connection($objConnection)
+    public function setConnection($objConnection)
     {
         $this->connection = $objConnection;
     }
@@ -190,11 +195,11 @@ abstract class Fmysql
      *
      * @return bool
      */
-    public function is_connect()
+    public function isConnect()
     {
         $boolReturn = false;
 
-        if(FM::is_variable($this->get_connection()))
+        if(isset($this->connection))
             $boolReturn = true;
 
         return $boolReturn;

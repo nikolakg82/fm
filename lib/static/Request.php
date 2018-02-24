@@ -6,44 +6,54 @@
  * Date: 4/30/2016
  * Time: 6:39 PM
  */
-class Ffetch
+
+namespace fm\lib\help;
+
+use fm\FM;
+
+class Request
 {
     public static function name($strName, $strType = FM_STRING, $mixMethod = array(FM_POST, FM_GET))
     {
         $mixValue = null;
 
-        if(FM::is_variable($mixMethod))
+        if(!empty($mixMethod))
         {
-            if(Fstring::is_string($mixMethod))
+            if(Stringer::isString($mixMethod))
                 $mixMethod = array($mixMethod);
 
-            if(Farray::is_array($mixMethod))
+            if(Arrays::isArray($mixMethod))
             {
                 foreach($mixMethod as $key => $val)
                 {
                     if($val == FM_POST)
                     {
-                        if(FM::is_variable($mixValue = FM::convert_value(self::post($strName), $strType)))
+                        $mixValue = FM::convertValue(self::post($strName), $strType);
+                        if(isset($mixValue))
                             break;
                     }
                     elseif($val == FM_GET)
                     {
-                        if(FM::is_variable($mixValue = FM::convert_value(self::get($strName), $strType)))
+                        $mixValue = FM::convertValue(self::get($strName), $strType);
+                        if(isset($mixValue))
                             break;
                     }
                     elseif($val == FM_COOKIE)
                     {
-                        if(FM::is_variable($mixValue == FM::convert_value(self::cookie($strName), $strType)))
+                        $mixValue = FM::convertValue(self::cookie($strName), $strType);
+                        if(isset($mixValue))
                             break;
                     }
                     elseif($val == FM_SESSION)
                     {
-                        if(FM::is_variable($mixValue == FM::convert_value(self::session($strName), $strType)))
+                        $mixValue = FM::convertValue(self::session($strName), $strType);
+                        if(isset($mixValue))
                             break;
                     }
                     elseif($val == FM_FILES)
                     {
-                        if(FM::is_variable($mixValue == FM::convert_value(self::files($strName), $strType)))
+                        $mixValue = FM::convertValue(self::files($strName), $strType);
+                        if(isset($mixValue))
                             break;
                     }
                 }

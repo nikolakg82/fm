@@ -6,14 +6,17 @@
  * Date: 4/30/2016
  * Time: 3:08 PM
  */
-class Farray
+
+namespace fm\lib\help;
+
+class Arrays
 {
     public static function reset($arrData)
     {
         return reset($arrData);
     }
 
-    public static function is_array($mixData)
+    public static function isArray($mixData)
     {
         return is_array($mixData);
     }
@@ -23,7 +26,7 @@ class Farray
         return serialize($arrData);
     }
 
-    public static function unserialize($strData)
+    public static function unSerialize($strData)
     {
         return unserialize($strData);
     }

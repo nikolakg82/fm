@@ -6,6 +6,13 @@
  * Date: 2/11/2018
  * Time: 6:13 PM
  */
+
+namespace fm\lib\publisher;
+
+use cms\CMS;
+use cms\lib\help\ControllerLoader;
+use cms\lib\help\Lang;
+
 class Response
 {
     protected $responseCode = 200;
@@ -23,7 +30,9 @@ class Response
     }
 
     /**
-     * @param int $statusCode
+     * @param int $intResponseCode
+     *
+     * @return Response
      */
     public function setResponseCode($intResponseCode)
     {
@@ -41,7 +50,9 @@ class Response
     }
 
     /**
-     * @param mixed $data
+     * @param mixed
+     *
+     * @return Response
      */
     public function setData($data)
     {
@@ -60,6 +71,8 @@ class Response
 
     /**
      * @param mixed $templatePath
+     *
+     * @return Response
      */
     public function setTemplatePath($templatePath)
     {
@@ -68,8 +81,11 @@ class Response
         return $this;
     }
 
-//    public function __construct()
-//    {
-//
-//    }
+    public function showView()
+    {
+        CMS::$view->assign('data', $this->getData());
+        CMS::$view->display($this->getTemplatePath());
+
+        CMS::$view->show();
+    }
 }

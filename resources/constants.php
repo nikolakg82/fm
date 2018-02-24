@@ -11,8 +11,10 @@
     define('FM_ABSTRACT',       FM_LIB          . "abstract/");
     define('FM_PUBLIC',         FM_LIB          . "public/");
     define('FM_STATIC',         FM_LIB          . "static/");
+    define('FM_INTERFACE',      FM_LIB          . "interface/");
 
     define('FM_RESOURCES',      FM_ROOT         . "resources/");
+    define('FM_CONFIG',         FM_ROOT         . "config/");
 
 /**
  *  Tipovi varijabli

@@ -6,17 +6,20 @@
  * Date: 4/21/2016
  * Time: 3:09 PM
  */
-class Fimage
+
+namespace fm\lib\help;
+
+class Image
 {
-    public static function getimagesize($strPath, $mixImageInfo = null)
+    public static function getImageSize($strPath, $mixImageInfo = null)
     {
         $mixReturn = null;
 
-        if(Ffile::file_exists($strPath))
+        if(File::exists($strPath))
         {
             $arrData = getimagesize($strPath, $mixImageInfo);
 
-            if(FM::is_variable($arrData))
+            if(isset($arrData))
             {
                 $mixReturn['width'] = $arrData[0];
                 $mixReturn['height'] = $arrData[1];
@@ -27,11 +30,11 @@ class Fimage
         return $mixReturn;
     }
 
-    public static function create_image($strDestinationFolder, $strFileName, $strSourcePath, $intFileType, $intWidth, $intHeight, $intPositionStartX, $intPositionStartY, $intPositionEndX, $intPositionEndY)
+    public static function createImage($strDestinationFolder, $strFileName, $strSourcePath, $intFileType, $intWidth, $intHeight, $intPositionStartX, $intPositionStartY, $intPositionEndX, $intPositionEndY)
     {
         $intReturn = 1;
 
-        if(Ffile::is_dir($strDestinationFolder))
+        if(File::isDir($strDestinationFolder))
         {
             $objDestImg = imagecreatetruecolor($intWidth, $intHeight);
 
@@ -66,18 +69,18 @@ class Fimage
         return $intReturn;
     }
 
-    public static function create_crop($strDestinationFolder, $strFileName, $strSourcePath, $intCropWidth, $intCropHeight, $arrPosition = null)
+    public static function createCrop($strDestinationFolder, $strFileName, $strSourcePath, $intCropWidth, $intCropHeight, $arrPosition = null)
     {
         $intReturn = 1;
 
-        $arrImageData = self::getimagesize($strSourcePath);
+        $arrImageData = self::getImageSize($strSourcePath);
 
-        if(FM::is_variable($arrImageData))
+        if(isset($arrImageData))
         {
-            if(!(FM::is_variable($arrPosition)))
-                $arrPosition = self::create_crop_position($arrImageData['width'], $arrImageData['height'], $intCropWidth, $intCropHeight);
+            if(!(isset($arrPosition)))
+                $arrPosition = self::createCropPosition($arrImageData['width'], $arrImageData['height'], $intCropWidth, $intCropHeight);
 
-            $intReturn = self::create_image($strDestinationFolder, $strFileName, $strSourcePath, $arrImageData['type'], $intCropWidth, $intCropHeight, $arrPosition['start_x'],
+            $intReturn = self::createImage($strDestinationFolder, $strFileName, $strSourcePath, $arrImageData['type'], $intCropWidth, $intCropHeight, $arrPosition['start_x'],
                                                 $arrPosition['start_y'], $arrPosition['end_x'], $arrPosition['end_y']);
         }
         else
@@ -86,7 +89,7 @@ class Fimage
         return $intReturn;
     }
 
-    public static function create_crop_position($intImageWidth, $intImageHeight, $intCropWidth, $intCropHeight)
+    public static function createCropPosition($intImageWidth, $intImageHeight, $intCropWidth, $intCropHeight)
     {
         $arrReturn['start_x'] = 0;
         $arrReturn['start_y'] = 0;
@@ -107,14 +110,14 @@ class Fimage
             $tempWidth = $intCropWidth * $ratio;
             $tempHeight = $intCropHeight * $ratio;
 
-            $tempWidth = Finteger::intval($tempWidth);
-            $tempHeight = Finteger::intval($tempHeight);
+            $tempWidth = Numeric::intVal($tempWidth);
+            $tempHeight = Numeric::intVal($tempHeight);
 
             $tempStartPositionX = ($intImageWidth - $tempWidth) / 2;
             $tempStartPositionY = ($intImageHeight - $tempHeight) / 2;
 
-            $arrReturn['start_x'] = Finteger::intval($tempStartPositionX);
-            $arrReturn['start_y'] = Finteger::intval($tempStartPositionY);
+            $arrReturn['start_x'] = Numeric::intVal($tempStartPositionX);
+            $arrReturn['start_y'] = Numeric::intVal($tempStartPositionY);
 
             $arrReturn['end_x'] = $tempWidth;
             $arrReturn['end_y'] = $tempHeight;
