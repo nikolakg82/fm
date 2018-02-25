@@ -9,6 +9,8 @@
 namespace fm\lib\help;
 
 
+use fm\FM;
+
 class Router
 {
     /**
@@ -41,4 +43,25 @@ class Router
         return isset(self::$routes[$strController]) ? self::$routes[$strController] : null;
     }
 
+    public static function getRouteDetails($strController, $strPath)
+    {
+        $arrRoutes = self::getRoutesFromController($strController);
+
+        $arrReturn = null;
+
+        if(isset($arrRoutes))
+        {
+            if($strPath == "/")
+            {
+                if(isset($arrRoutes[$strPath][FM::requestMethod()]))
+                    $arrReturn = $arrRoutes[$strPath][FM::requestMethod()];
+            }
+            else
+            {
+
+            }
+        }
+
+        return $arrReturn;
+    }
 }
