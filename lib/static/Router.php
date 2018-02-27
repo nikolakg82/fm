@@ -28,13 +28,14 @@ class Router
      */
     protected static $routes;
 
-    public static function addRoute($strControllerName, $strRoutePath, $strFunctionName, $strMethod)
+    public static function addRoute($strControllerName, $strRoutePath, $strFunctionName, $strMethod, $intPermission = CMS_GUEST | CMS_USER | CMS_ADMIN)
     {
         if(self::isRouteExist($strControllerName, $strRoutePath, $strMethod))
             throw new \Exception("Route $strRoutePath and method $strMethod already exist.");
 
         self::$routes[$strControllerName][$strRoutePath][$strMethod] = array(
             'function'  => $strFunctionName,
+            'permission'=> $intPermission
         );
     }
 
