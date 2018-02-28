@@ -74,9 +74,17 @@ class Router
                 {
                     $strPath .= "/" . CMS::$viewFormat;
 
-                    if(preg_match(self::generateRegex($strRoute), $strPath) > 0)
-                    {
+//                    var_dump(self::generateRegex($strRoute));
+//                    var_dump($strPath);
+//
+//                    $str1 = "/aktivnosti/lorem-ipsum/html";
+//                    $strpatern = "~\A\/json|html+\z~";
 
+                    preg_match(self::generateRegex($strRoute), $strPath, $matches);
+
+var_dump(self::generateRegex($strRoute));
+                    if(isset($matches[0]) && $matches[0] == $strPath)
+                    {
                         if(isset($arrRoutes[$strRoute][FM::requestMethod()]))
                             $arrReturn = $arrRoutes[$strRoute][FM::requestMethod()];
 
@@ -107,7 +115,17 @@ class Router
             if(!empty($arrParams))
             {
                 foreach ($arrParams as $param)
-                    $arrReturn['params'][$param] = $param;
+                {
+                    $arrParamsValue = Stringer::explode($param, ":");
+                    if(isset($arrParamsValue[1]))
+                    {
+                        unset($arrParamsValue[0]);
+                        foreach ($arrParamsValue as $strValue)
+                            $arrReturn['values'][] = $strValue;
+                    }
+                    else
+                        $arrReturn['params'][$param] = $param;
+                }
             }
         }
 
@@ -132,27 +150,38 @@ class Router
 
                 if($arrParamsData['var'])
                 {
-                    if(isset($arrParamsData['params'][FM_REQUIRED]))
-                        $strRegex .= "\/";
-                    else
-                        $strRegex .= "\/*";
+                    if(isset($arrParamsData['values']))
+                    {
+                        foreach ($arrParamsData['values'] as $strValue)
+                            $strRegex .= "\/$strValue+|";
 
-                    if(isset($arrParamsData['params'][FM_INTEGER]))
-                        $strRegex .= "\d";
+                        $strRegex = Stringer::subStr($strRegex, 0, -1);
+                    }
                     else
-                        $strRegex .= ".";
+                    {
+                        if(isset($arrParamsData['params'][FM_REQUIRED]))
+                            $strRegex .= "\/";
+                        else
+                            $strRegex .= "\/*";
 
-                    if(isset($arrParamsData['params'][FM_REQUIRED]))
-                        $strRegex .= "+";
-                    else
-                        $strRegex .= "*";
+                        if(isset($arrParamsData['params'][FM_INTEGER]))
+                            $strRegex .= "\d";
+                        else
+                            $strRegex .= ".";
+
+                        if(isset($arrParamsData['params'][FM_REQUIRED]))
+                            $strRegex .= "+";
+                        else
+                            $strRegex .= "*";
+                    }
+
                 }
                 else
                     $strRegex .= "\/" . $arrParamsData['name'];
             }
         }
 
-        $strRegex .= '\z~';
+        $strRegex .= '\Z~';
 
         return $strRegex;
     }
