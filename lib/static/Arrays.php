@@ -30,4 +30,14 @@ class Arrays
     {
         return unserialize($strData);
     }
+
+    public static function count($arrData)
+    {
+        $intCount = 0;
+
+        if(self::isArray($arrData))
+            $intCount =  count($arrData);
+
+        return $intCount;
+    }
 }

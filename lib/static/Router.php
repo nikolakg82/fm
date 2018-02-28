@@ -20,6 +20,7 @@ use fm\FM;
 class Router
 {
     /**
+     * @TODO - Prepraviti primer strukture niza
      * @var array ('route_path_route_method' => array(
      *                      'path'          => '',
      *                      'controller'    => 'controller_key',
@@ -34,7 +35,7 @@ class Router
         if(self::isRouteExist($strControllerName, $strRoutePath, $strMethod))
             throw new \Exception("Route $strRoutePath and method $strMethod already exist.");
 
-        self::$routes[$strControllerName][$strRoutePath][$strMethod] = array(
+        self::$routes[$strControllerName][$strMethod][$strRoutePath] = array(
             'function'  => $strFunctionName,
             'permission'=> $intPermission
         );
@@ -42,19 +43,21 @@ class Router
 
     public static function isRouteExist($strControllerName, $strRoutePath, $strMethod)
     {
-        return isset(self::$routes[$strControllerName][$strRoutePath][$strMethod]);
+        return isset(self::$routes[$strControllerName][$strMethod][$strRoutePath]);
     }
 
-    public static function getRoutesFromController($strController)
+    public static function getRoutesFromController($strController, $strMethod)
     {
-        return isset(self::$routes[$strController]) ? self::$routes[$strController] : null;
+        return isset(self::$routes[$strController][$strMethod]) ? self::$routes[$strController][$strMethod] : null;
     }
 
     public static function getRouteDetails($strController, $strPath)
     {
-        $arrRoutes = self::getRoutesFromController($strController);
+        $arrRoutes = self::getRoutesFromController($strController, FM::requestMethod());
 
         $arrReturn = null;
+
+        $strPathMod = $strPath . "." . CMS::$viewFormat;
 
         if(isset($arrRoutes))
         {
@@ -64,29 +67,18 @@ class Router
                 {
                     if($strPath == "/")
                     {
-                        if(isset($arrRoutes[$strRoute][FM::requestMethod()]))
-                            $arrReturn = $arrRoutes[$strRoute][FM::requestMethod()];
+                        if(isset($arrRoutes[$strRoute]))
+                            $arrReturn = $arrRoutes[$strRoute];
 
                         break;
                     }
                 }
                 else
                 {
-                    $strPath .= "/" . CMS::$viewFormat;
-
-//                    var_dump(self::generateRegex($strRoute));
-//                    var_dump($strPath);
-//
-//                    $str1 = "/aktivnosti/lorem-ipsum/html";
-//                    $strpatern = "~\A\/json|html+\z~";
-
-                    preg_match(self::generateRegex($strRoute), $strPath, $matches);
-
-var_dump(self::generateRegex($strRoute));
-                    if(isset($matches[0]) && $matches[0] == $strPath)
+                    if(preg_match(self::generateRegex($strRoute), $strPathMod) >= 1)
                     {
-                        if(isset($arrRoutes[$strRoute][FM::requestMethod()]))
-                            $arrReturn = $arrRoutes[$strRoute][FM::requestMethod()];
+                        if(isset($arrRoutes[$strRoute]))
+                            $arrReturn = $arrRoutes[$strRoute];
 
                         break;
                     }
@@ -103,6 +95,7 @@ var_dump(self::generateRegex($strRoute));
         $arrReturn['var'] = false;
         $regex = '/{(.*)}/';
         preg_match_all($regex, $strParam, $matches);
+
         if(!empty($matches[1]))
         {
             $arrParams = Stringer::explode($matches[1][0], "|");
@@ -134,54 +127,91 @@ var_dump(self::generateRegex($strRoute));
 
     public static function generateRegex($strRoute)
     {
-        $strRegex = '~\A';
+        $strRegex = '/^';
 
         //@TODO - ovde treba da se hvata i get
-        //@TODO - generisati regex za {view}
 
         $strRoute = Stringer::subStr($strRoute, 1);
-        $arrRoute = Stringer::explode($strRoute,"/");
 
-        if(!empty($arrRoute))
+        $arrRoutes = Stringer::explode($strRoute, "?");
+
+
+        if(isset($arrRoutes[0]))
         {
-            foreach($arrRoute as $strRouteParam)
-            {
-                $arrParamsData = self::getParamsData($strRouteParam);
+            $arrRoute = Stringer::explode($arrRoutes[0], ".");
 
-                if($arrParamsData['var'])
+            if(isset($arrRoute[0]))
+            {
+                $arrPath = Stringer::explode($arrRoute[0], "/");
+
+                if(!empty($arrPath))
                 {
-                    if(isset($arrParamsData['values']))
+                    foreach($arrPath as $strRouteParam)
                     {
+                        $arrParamsData = self::getParamsData($strRouteParam);
+
+                        if($arrParamsData['var'])
+                        {
+                            if(isset($arrParamsData['values']))
+                            {
+                                $strRegex .= "\/(";
+                                foreach ($arrParamsData['values'] as $strValue)
+                                    $strRegex .= "$strValue|";
+
+                                $strRegex = Stringer::subStr($strRegex, 0, -1);
+
+                                $strRegex .= ")";
+                            }
+                            else
+                            {
+                                if(isset($arrParamsData['params'][FM_REQUIRED]))
+                                    $strRegex .= "\/";
+                                else
+                                    $strRegex .= "\/*";
+
+                                if(isset($arrParamsData['params'][FM_INTEGER]))
+                                    $strRegex .= "\d";
+                                else
+                                    $strRegex .= ".";
+
+                                if(isset($arrParamsData['params'][FM_REQUIRED]))
+                                    $strRegex .= "+";
+                                else
+                                    $strRegex .= "*";
+                            }
+
+                        }
+                        else
+                            $strRegex .= "\/" . $arrParamsData['name'];
+                    }
+                }
+            }
+
+            if(isset($arrRoute[1]))
+            {
+                $arrParamsData = self::getParamsData($arrRoute[1]);
+
+                if(isset($arrParamsData['values']))
+                {
+                    $strRegex .= ".";
+
+                    if(Arrays::count($arrParamsData['values']) > 1)
+                    {
+                        $strRegex .= "(";
                         foreach ($arrParamsData['values'] as $strValue)
-                            $strRegex .= "\/$strValue+|";
+                            $strRegex .= "$strValue|";
 
                         $strRegex = Stringer::subStr($strRegex, 0, -1);
+
+                        $strRegex .= ")";
                     }
                     else
-                    {
-                        if(isset($arrParamsData['params'][FM_REQUIRED]))
-                            $strRegex .= "\/";
-                        else
-                            $strRegex .= "\/*";
-
-                        if(isset($arrParamsData['params'][FM_INTEGER]))
-                            $strRegex .= "\d";
-                        else
-                            $strRegex .= ".";
-
-                        if(isset($arrParamsData['params'][FM_REQUIRED]))
-                            $strRegex .= "+";
-                        else
-                            $strRegex .= "*";
-                    }
-
+                        $strRegex .= $arrParamsData['values'][0];
                 }
-                else
-                    $strRegex .= "\/" . $arrParamsData['name'];
             }
         }
 
-        $strRegex .= '\Z~';
+        $strRegex .= '$/';
 
         return $strRegex;
     }
