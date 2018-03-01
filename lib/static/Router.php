@@ -69,8 +69,6 @@ class Router
                     {
                         if(isset($arrRoutes[$strRoute]))
                             $arrReturn = $arrRoutes[$strRoute];
-
-                        break;
                     }
                 }
                 else
@@ -78,11 +76,62 @@ class Router
                     if(preg_match(self::generateRegex($strRoute), $strPathMod) >= 1)
                     {
                         if(isset($arrRoutes[$strRoute]))
-                            $arrReturn = $arrRoutes[$strRoute];
+                        {
+                            $boolSetRouteData = true;
 
-                        break;
+                            $arrRouteData = Stringer::explode($strRoute, "?");
+
+                            if(isset($arrRouteData[1]))
+                            {
+                                $arrRouteQuery = Stringer::explode($arrRouteData[1], "&");
+
+                                if(!empty($arrRouteQuery))
+                                {
+                                    foreach ($arrRouteQuery as $strQuery)
+                                    {
+                                        $arrQueryData = self::getParamsData($strQuery);
+
+                                        if($arrQueryData['var'])
+                                        {
+                                            $arrQueryParams[$arrQueryData['name']] = Request::get($arrQueryData['name']);
+
+                                            if(isset($arrQueryData['params'][FM_REQUIRED]) && !isset($arrQueryParams[$arrQueryData['name']]))
+                                            {
+                                                $boolSetRouteData = false;
+                                                break;
+                                            }
+
+                                            if(isset($arrQueryData['params'][FM_INTEGER]))
+                                            {
+                                                if(isset($arrQueryParams[$arrQueryData['name']]))
+                                                {
+                                                    if(!Numeric::isNumeric($arrQueryParams[$arrQueryData['name']]))
+                                                    {
+                                                        $boolSetRouteData = false;
+                                                        break;
+                                                    }
+                                                    else
+                                                        $arrQueryParams[$arrQueryData['name']] = Numeric::intVal($arrQueryParams[$arrQueryData['name']]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if($boolSetRouteData)
+                            {
+                                $arrReturn = $arrRoutes[$strRoute];
+
+                                if(isset($arrQueryParams))
+                                    $arrReturn['params'] = $arrQueryParams;
+                            }
+                        }
                     }
                 }
+
+                if(isset($arrReturn))
+                    break;
             }
         }
 
@@ -134,7 +183,6 @@ class Router
         $strRoute = Stringer::subStr($strRoute, 1);
 
         $arrRoutes = Stringer::explode($strRoute, "?");
-
 
         if(isset($arrRoutes[0]))
         {
