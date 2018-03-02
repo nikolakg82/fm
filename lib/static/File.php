@@ -6,12 +6,15 @@
  * Date: 4/21/2016
  * Time: 2:44 PM
  */
-class Ffile
+
+namespace fm\lib\help;
+
+class File
 {
     public static function unlink($strPath, $mixContext = null)
     {
         $intReturn = 1;
-        if(self::file_exists($strPath))
+        if(self::exists($strPath))
         {
             if(unlink($strPath, $mixContext))
                 $intReturn = 2;
@@ -22,17 +25,17 @@ class Ffile
         return $intReturn;
     }
 
-    public static function file_exists($strPath)
+    public static function exists($strPath)
     {
         return file_exists($strPath);
     }
 
-    public static function mkdir($strPath, $intPermission = "0777", $boolRecursive = false, $mixContext = null)
+    public static function makeDir($strPath, $intPermission = "0777", $boolRecursive = false, $mixContext = null)
     {
         return mkdir($strPath, $intPermission, $boolRecursive, $mixContext);
     }
 
-    public static function move_uploaded_file($strTmpName, $strPath)
+    public static function moveUploadedFile($strTmpName, $strPath)
     {
         return move_uploaded_file($strTmpName, $strPath);
     }
@@ -47,12 +50,13 @@ class Ffile
         return rename($strOldPath, $strNewPath, $mixContext);
     }
 
-    public static function scandir($strPath, $intSort = SCANDIR_SORT_ASCENDING, $mixContext = null)
+    public static function scanDir($strPath, $intSort = SCANDIR_SORT_ASCENDING, $mixContext = null)
     {
         $arrData = null;
 
         $arrDataTemp = scandir($strPath, $intSort, $mixContext);
-        if(FM::is_variable($arrDataTemp))
+
+        if(isset($arrDataTemp))
         {
             foreach($arrDataTemp as $key => $val)
             {
@@ -64,7 +68,7 @@ class Ffile
         return $arrData;
     }
 
-    public static function is_dir($strPath)
+    public static function isDir($strPath)
     {
         return is_dir($strPath);
     }
@@ -74,12 +78,13 @@ class Ffile
         return chmod($strPath, $intMode);
     }
 
-    public static function file_get_contents($strPath)
+    public static function fileGetContents($strPath)
     {
         $mixReturn = null;
 
-        if(self::file_exists($strPath))
+        if(self::exists($strPath))
             $mixReturn = file_get_contents($strPath);
+
         return $mixReturn;
     }
 }

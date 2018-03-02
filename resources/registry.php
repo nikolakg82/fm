@@ -6,24 +6,34 @@
  * Time: 7:37 PM
  */
 
+use fm\lib\help\ClassLoader, fm\lib\help\InterfaceLoader;
+
 /**
  * Staticne klase
  */
-Floader::add_class('Fstring',           FM_STATIC . 'fstring.php');
-Floader::add_class('Finteger',          FM_STATIC . 'finteger.php');
-Floader::add_class('Ffile',             FM_STATIC . 'ffile.php');
-Floader::add_class('Fimage',            FM_STATIC . 'fimage.php');
-Floader::add_class('Farray',            FM_STATIC . 'farray.php');
-Floader::add_class('Ffetch',            FM_STATIC . 'ffetch.php');
+ClassLoader::addClass('Stringer',          FM_STATIC . 'Stringer.php');
+ClassLoader::addClass('Numeric',          FM_STATIC . 'Numeric.php');
+ClassLoader::addClass('File',              FM_STATIC . 'File.php');
+ClassLoader::addClass('Image',            FM_STATIC . 'Image.php');
+ClassLoader::addClass('Arrays',            FM_STATIC . 'Arrays.php');
+ClassLoader::addClass('Request',            FM_STATIC . 'Request.php');
+ClassLoader::addClass('InterfaceLoader',   FM_STATIC . 'InterfaceLoader.php');
+ClassLoader::addClass('TraitLoader',       FM_STATIC . 'TraitLoader.php');
+ClassLoader::addClass('Router',             FM_STATIC . 'Router.php');
+
+//Load staticnih klasa
+ClassLoader::loadStaticClass();
+
+InterfaceLoader::addItem('DatabaseEngine', FM_INTERFACE . 'DatabaseEngine.php');
 
 /**
  * Abstraktne klase
  */
-Floader::add_class('Fmysql',            FM_ABSTRACT . 'fmysql.php',         'abstract');
+ClassLoader::addClass('Database',            FM_ABSTRACT . 'Database.php',         'abstract', null, ['DatabaseEngine']);
 
 /**
  * Public klase
  */
-Floader::add_class('Fpdo',              FM_PUBLIC . 'fpdo.php',             'public',   'Fmysql');
-Floader::add_class('Fdb',               FM_PUBLIC . 'fdb.php',              'public');
-Floader::add_class('Response',          FM_PUBLIC . 'Response.php',         'public');
+ClassLoader::addClass('fm\lib\publisher\DatabasePdoEngine',              FM_PUBLIC . 'DatabasePdoEngine.php',             'public',   'Database');
+ClassLoader::addClass('fm\lib\publisher\DatabaseEngine',               FM_PUBLIC . 'DatabaseEngine.php',              'public');
+ClassLoader::addClass('fm\lib\publisher\Response',          FM_PUBLIC . 'Response.php',         'public');

@@ -6,7 +6,14 @@
  * Date: 4/22/2016
  * Time: 1:16 PM
  */
-class Fpdo extends Fmysql
+
+namespace fm\lib\publisher;
+
+use fm\lib\abstracts\Database;
+use fm\lib\help\Arrays;
+use fm\lib\help\Numeric;
+
+class DatabasePdoEngine extends Database
 {
     /**
      * Vrsi se priprema mysql stringa za upit
@@ -15,9 +22,9 @@ class Fpdo extends Fmysql
      */
     public function prepare($strQuery)
     {
-        if($this->is_connect())
+        if($this->isConnect())
         {
-            $this->set_result($this->get_connection()->prepare($strQuery));
+            $this->setResult($this->getConnection()->prepare($strQuery));
         }
     }
 
@@ -28,7 +35,7 @@ class Fpdo extends Fmysql
      */
     public function execute($mixStatments = null)
     {
-        $this->get_result()->execute($mixStatments);
+        $this->getResult()->execute($mixStatments);
     }
 
     /**
@@ -41,14 +48,14 @@ class Fpdo extends Fmysql
      */
     public function fetch($strFetchMode = FM_FETCH_ASSOC, $boolAll = true)
     {
-        $strResultMode = PDO::FETCH_ASSOC;
+        $strResultMode = \PDO::FETCH_ASSOC;
         if($strFetchMode == FM_FETCH_KEY_PAIR)
-            $strResultMode = PDO::FETCH_KEY_PAIR;
+            $strResultMode = \PDO::FETCH_KEY_PAIR;
 
         if($boolAll)
-            $arrData = $this->get_result()->fetchAll($strResultMode);
+            $arrData = $this->getResult()->fetchAll($strResultMode);
         else
-            $arrData = $this->get_result()->fetch($strResultMode);
+            $arrData = $this->getResult()->fetch($strResultMode);
 
         return $arrData;
     }
@@ -58,10 +65,10 @@ class Fpdo extends Fmysql
      *
      * @return int|null
      */
-    public function fetch_count()
+    public function fetchCount()
     {
         //@TODO - ovo verovatno treba malo prepraviti, ako nema rezultat baca error
-        return Finteger::convert_to_integer(Farray::reset($this->get_result()->fetch(PDO::FETCH_ASSOC)));
+        return Numeric::convertToInteger(Arrays::reset($this->getResult()->fetch(\PDO::FETCH_ASSOC)));
     }
 
     /**
@@ -70,7 +77,7 @@ class Fpdo extends Fmysql
      */
     public function free()
     {
-        $this->set_result(null);
+        $this->setResult(null);
     }
 
     /**
@@ -78,9 +85,9 @@ class Fpdo extends Fmysql
      *
      * @return mixed
      */
-    public function last_insert_id()
+    public function lastInsertId()
     {
-        return $this->get_connection()->lastInsertId();
+        return $this->getConnection()->lastInsertId();
     }
 
     /**
@@ -88,9 +95,9 @@ class Fpdo extends Fmysql
      *
      * @return mixed
      */
-    public function row_count()
+    public function rowCount()
     {
-        return $this->get_result()->rowCount();
+        return $this->getResult()->rowCount();
     }
 
     /**
@@ -98,9 +105,9 @@ class Fpdo extends Fmysql
      */
     public function connect()
     {
-        if(!$this->is_connect())
+        if(!$this->isConnect())
         {
-            $this->set_connection(new PDO("mysql:host=" . $this->get_host() . ";dbname=" . $this->get_name() . ";charset=" . $this->get_charset(), $this->get_username(), $this->get_password()));
+            $this->setConnection(new \PDO("mysql:host=" . $this->getHost() . ";dbname=" . $this->getName() . ";charset=" . $this->getCharset(), $this->getUsername(), $this->getPassword()));
 
             // @TODO - ako konekcija nije uspela upisati u log
         }

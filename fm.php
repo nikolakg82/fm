@@ -10,6 +10,14 @@
  * Date: 4/6/2016
  * Time: 2:47 PM
  */
+namespace fm;
+
+use fm\lib\help\Arrays;
+use fm\lib\help\ClassLoader;
+use fm\lib\help\Numeric;
+use fm\lib\help\Request;
+use fm\lib\help\Stringer;
+
 class FM
 {
     /**
@@ -32,6 +40,8 @@ class FM
     /**
      * @param $mixData
      * @return bool
+     *
+     * @deprecated - metoda treba da se izbaci
      */
     public static function is_variable($mixData)
     {
@@ -42,31 +52,31 @@ class FM
         return $boolReturn;
     }
 
-    public static function convert_value($mixValue, $strType)
+    public static function convertValue($mixValue, $strType)
     {
         $mixReturn = null;
 
         if($strType == FM_STRING)
-            $mixReturn = Fstring::convert_to_string($mixValue);
+            $mixReturn = Stringer::convertToString($mixValue);
         elseif($strType == FM_INTEGER)
-            $mixReturn = Finteger::convert_to_integer($mixValue);
+            $mixReturn = Numeric::convertToInteger($mixValue);
         elseif($strType == FM_FLOAT)
-            $mixReturn = Finteger::floatval($mixValue);
+            $mixReturn = Numeric::floatVal($mixValue);
         elseif($strType == FM_ARRAY)
         {
-            if(self::is_variable($mixValue) && Farray::is_array($mixValue))
+            if(!empty($mixValue) && Arrays::isArray($mixValue))
                 $mixReturn = $mixValue;
         }
 
         return $mixReturn;
     }
 
-    public static function get_server_protocol()
+    public static function getServerProtocol()
     {
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     }
 
-    public static function get_site_domain()
+    public static function getSiteDomain()
     {
         return $_SERVER['SERVER_NAME'];
     }
@@ -74,6 +84,11 @@ class FM
     public static function referer()
     {
         return $_SERVER['HTTP_REFERER'];
+    }
+
+    public static function requestMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'];
     }
 
     public static function header($strHeader, $boolReplace = true, $intHttpResponseCode = null)
@@ -86,12 +101,18 @@ class FM
         self::header("Location: $strUrl", true, $intResponseCode);
     }
 
-    public static function start_session($strSessionName, $boolFromCookie = false)
+    public static function startSession($strSessionName, $boolFromCookie = false)
     {
         $boolStartSession = true;
 
-        if($boolFromCookie && !FM::is_variable(Ffetch::cookie($strSessionName)))
-            $boolStartSession = false;
+        // @TODO - ovaj if ispitati, sta mu je poenta
+        if($boolFromCookie)
+        {
+            $strDataTemp = Request::cookie($strSessionName);
+
+            if(!isset($strDataTemp))
+                $boolStartSession = false;
+        }
 
         if($boolStartSession)
         {
@@ -100,24 +121,24 @@ class FM
         }
     }
 
-    public static function set_session_data($strKey, $strData)
+    public static function setSessionData($strKey, $strData)
     {
         $_SESSION[$strKey] = $strData;
     }
 
-    public static function kill_session($strKey, $strName)
+    public static function killSession($strKey, $strName)
     {
         unset($_SESSION[$strKey]);
-        self::kill_cookie($strName);
+        self::killCookie($strName);
     }
 
-    public static function kill_cookie($strName)
+    public static function killCookie($strName)
     {
-        self::set_cookie($strName, '', time() + 50);
+        self::setCookie($strName, '', time() + 50);
         unset($_COOKIE[$strName]);
     }
 
-    public static function set_cookie($strName, $strValue, $intTimeExpire = 0, $strPath = "/", $strDomain = "", $boolSecure = false, $boolHttpOnly = false)
+    public static function setCookie($strName, $strValue, $intTimeExpire = 0, $strPath = "/", $strDomain = "", $boolSecure = false, $boolHttpOnly = false)
     {
         setcookie($strName, $strValue, $intTimeExpire, $strPath, $strDomain, $boolSecure, $boolHttpOnly);
     }
@@ -126,7 +147,7 @@ class FM
 define('FM_ROOT', realpath(dirname(__FILE__)) . '/');
 
 FM::includer(FM_ROOT . 'resources/constants.php');
-FM::includer(FM_STATIC . 'floader.php');
+FM::includer(FM_STATIC . 'ClassLoader.php');
 FM::includer(FM_RESOURCES . 'registry.php');
 
-Floader::load_static_class();
+ClassLoader::loadStaticClass();
