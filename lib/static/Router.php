@@ -15,7 +15,6 @@ use fm\FM;
 /**
  * Class Router
  * @package fm\lib\help
- * @TODO 1.napraviti router de parsuje i get, 2. kad u ruti postoji parametar vrednost parametra treba da se prosledi funkciji koja se poziva
  */
 class Router
 {
@@ -80,6 +79,9 @@ class Router
                             $boolSetRouteData = true;
 
                             $arrRouteData = Stringer::explode($strRoute, "?");
+
+                            if(isset($arrRouteData[0]))
+                                $arrQueryParams = self::getParamsDataValue($strPathMod, $arrRouteData[0]);
 
                             if(isset($arrRouteData[1]))
                             {
@@ -178,8 +180,6 @@ class Router
     {
         $strRegex = '/^';
 
-        //@TODO - ovde treba da se hvata i get
-
         $strRoute = Stringer::subStr($strRoute, 1);
 
         $arrRoutes = Stringer::explode($strRoute, "?");
@@ -262,5 +262,28 @@ class Router
         $strRegex .= '$/';
 
         return $strRegex;
+    }
+
+    public static function getParamsDataValue($strPath, $strRoute)
+    {
+        $arrReturn = null;
+
+        $arrRoute = Stringer::explode($strRoute, ".");
+        $arrPath =  Stringer::explode($strPath, ".");
+
+        $arrRoutes = Stringer::explode($arrRoute[0], "/");
+        $arrPaths =  Stringer::explode($arrPath[0], "/");
+
+        foreach ($arrRoutes as $intKeyRouteParam => $strRouteParam)
+        {
+            $arrParamsData = self::getParamsData($strRouteParam);
+
+            if($arrParamsData['var'])
+            {
+                $arrReturn[$arrParamsData['name']] = $arrPaths[$intKeyRouteParam];
+            }
+        }
+
+        return $arrReturn;
     }
 }
