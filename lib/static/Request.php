@@ -73,12 +73,17 @@ class Request
         return $mixValue;
     }
 
-    public static function get($strName)
+    public static function get($strName = null)
     {
         $mixValue = null;
 
-        if(isset($_GET[$strName]))
-            $mixValue = $_GET[$strName];
+        if(isset($strName))
+        {
+            if(isset($_GET[$strName]))
+                $mixValue = $_GET[$strName];
+        }
+        elseif (isset($_GET))
+            $mixValue = $_GET;
 
         return $mixValue;
     }

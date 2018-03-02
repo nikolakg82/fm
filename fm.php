@@ -86,6 +86,11 @@ class FM
         return $_SERVER['HTTP_REFERER'];
     }
 
+    public static function requestMethod()
+    {
+        return $_SERVER['REQUEST_METHOD'];
+    }
+
     public static function header($strHeader, $boolReplace = true, $intHttpResponseCode = null)
     {
         header($strHeader, $boolReplace, $intHttpResponseCode);

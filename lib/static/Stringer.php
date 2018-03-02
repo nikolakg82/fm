@@ -16,7 +16,7 @@ class Stringer
         return self::subStr($strString, 0, $intLength) . $strEnd;
     }
 
-    public static function subStr($strString, $intStart, $intLength)
+    public static function subStr($strString, $intStart, $intLength = PHP_INT_MAX)
     {
         return substr($strString, $intStart, $intLength);
     }
@@ -74,5 +74,22 @@ class Stringer
             $mixReturn = (string)$mixValue;
 
         return $mixReturn;
+    }
+
+    public static function strPos($strString, $strFind, $intOffset = 0)
+    {
+        return strpos($strString, $strFind, $intOffset);
+    }
+
+    public static function findCharacter($strWord, $strCharacter)
+    {
+        $boolReturn = false;
+
+        $mixPos = self::strPos($strWord, $strCharacter);
+
+        if($mixPos !== false)
+            $boolReturn = true;
+
+        return $boolReturn;
     }
 }

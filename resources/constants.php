@@ -24,12 +24,15 @@
     define('FM_ARRAY',          'array');
     define('FM_FLOAT',          'float');
     define('FM_BOOLEAN',        'boolean');
+    define('FM_REQUIRED' ,      'required');
 
 /**
  * Hederi
  */
-    define('FM_POST',           'post');
-    define('FM_GET',            'get');
+    define('FM_POST',           'POST');
+    define('FM_GET',            'GET');
+    define('FM_PUT',            'PUT');
+    define('FM_DELETE',         'DELETE');
     define('FM_COOKIE',         'cookie');
     define('FM_SESSION',        'session');
     define('FM_FILES',          'files');
