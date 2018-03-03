@@ -51,6 +51,7 @@
     define('FM_MLC',            'mlc');
     define('FM_TEXT',           'text');
     define('FM_DATE',           'date');
+    define('FM_DATE_TIME',      'date_time');
     define('FM_NUMERIC',        'numeric');
     define('FM_TEXT_AREA',      'textarea');
     define('FM_TEXT_EDITOR',    'texteditor');
