@@ -91,6 +91,16 @@ class FM
         return $_SERVER['REQUEST_METHOD'];
     }
 
+    public static function getCustomHttpHeader($strKey)
+    {
+        $mixReturn = null;
+
+        if(isset($_SERVER['HTTP_' . Stringer::uppercase($strKey)]))
+            $mixReturn = $_SERVER['HTTP_' . Stringer::uppercase($strKey)];
+
+        return $mixReturn;
+    }
+
     public static function header($strHeader, $boolReplace = true, $intHttpResponseCode = null)
     {
         header($strHeader, $boolReplace, $intHttpResponseCode);

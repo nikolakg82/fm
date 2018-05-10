@@ -92,4 +92,9 @@ class Stringer
 
         return $boolReturn;
     }
+
+    public static function uppercase($strWord)
+    {
+        return strtoupper($strWord);
+    }
 }
