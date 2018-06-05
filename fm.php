@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FM glavna klasa
+ * FM Main class
  *
  * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
  * @link http://www.nikolamilenkovic.com
@@ -21,11 +21,11 @@ use fm\lib\help\Stringer;
 class FM
 {
     /**
-     * Radi php include fajla
+     * Include php file
      *
-     * @param string $strPath - putanja do fajla
-     * @param bool $boolOnce - includovanje samo jednom ili vise puta
-     * @return mixed - Vraca includovan fajl, ako ima return u njemu
+     * @param string $strPath - Path to the file
+     * @param bool $boolOnce - Include once or multi time
+     * @return mixed - Value of included file
      */
     public static function includer($strPath, $boolOnce = true)
     {
@@ -41,7 +41,7 @@ class FM
      * @param $mixData
      * @return bool
      *
-     * @deprecated - metoda treba da se izbaci
+     * @deprecated - Method is deprecated, need to be removed
      */
     public static function is_variable($mixData)
     {
@@ -115,7 +115,7 @@ class FM
     {
         $boolStartSession = true;
 
-        // @TODO - ovaj if ispitati, sta mu je poenta
+        // @TODO - check point of this condition
         if($boolFromCookie)
         {
             $strDataTemp = Request::cookie($strSessionName);
