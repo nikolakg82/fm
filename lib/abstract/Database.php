@@ -128,70 +128,91 @@ abstract class Database implements DatabaseEngine
      * Set hostname
      *
      * @param string $strHost
+     * @return Database
      */
     public function setHost($strHost)
     {
         $this->host = $strHost;
+
+        return $this;
     }
 
     /**
      * Set name of database
      *
      * @param string $strName
+     * @return Database
      */
     public function setName($strName)
     {
         $this->name = $strName;
+
+        return $this;
     }
 
     /**
      * Set username
      *
      * @param string $strUsername
+     * @return Database
      */
     public function setUsername($strUsername)
     {
         $this->username = $strUsername;
+
+        return $this;
     }
 
     /**
      * Set password
      *
      * @param string $strPassword
+     * @return $this
      */
     public function setPassword($strPassword)
     {
         $this->password = $strPassword;
+
+        return $this;
     }
 
     /**
      * Set character set
      *
      * @param string $strCharset
+     * @return $this
      */
     public function setCharset($strCharset)
     {
         $this->charset = $strCharset;
+
+        return $this;
     }
 
     /**
      * Set result of query
      *
      * @param mixed $mixData
+     * @return $this
      */
     public function setResult($mixData)
     {
         $this->result = $mixData;
+
+        return $this;
     }
 
     /**
      * Set connection on database
      *
      * @param object $objConnection
+     * @return $this
      */
     public function setConnection($objConnection)
     {
         $this->connection = $objConnection;
+
+        return $this;
     }
 
     /**

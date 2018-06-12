@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 4/22/2016
  * Time: 1:16 PM
  */
@@ -16,35 +18,35 @@ use fm\lib\help\Numeric;
 class DatabasePdoEngine extends Database
 {
     /**
-     * Vrsi se priprema mysql stringa za upit
+     * Prepare mysql query for request
      *
-     * @param $strQuery - MYSQL upit
+     * @param $strQuery - MYSQL query
+     * @return void
      */
     public function prepare($strQuery)
     {
         if($this->isConnect())
-        {
             $this->setResult($this->getConnection()->prepare($strQuery));
-        }
     }
 
     /**
-     * Vrsi se mysql upit, sa prosledjenim parametrima za prepare statment
+     * Execute query with prepare statements
      *
-     * @param null $mixStatments - parametri prepare statment
+     * @param null $mixStatements - parameter for prepare statements
+     * @return void
      */
-    public function execute($mixStatments = null)
+    public function execute($mixStatements = null)
     {
-        $this->getResult()->execute($mixStatments);
+        $this->getResult()->execute($mixStatements);
     }
 
     /**
-     * Vraca rezultat upita, jedan ili vise reziltata, formatiranih na odredjeni nacin
+     * Return result of query
      *
-     * @param string $strFetchMode - Mod za vracanje rezultata ako je FM_FETCH_ASSOC - vraca kao niz, FM_FETCH_KEY_PAIR - vraca tako sto je prvo polje u upitu kljuc niza a drugo
-     * vrenost niza
-     * @param bool $boolAll - Ako je true onda vraca sve rezultate u niz, a false vraca samo prvi rezultat
-     * @return mixed
+     * @param string $strFetchMode - Result format. Allowed params is FM_FETCH_ASSOC|FM_FETCH_KEY_PAIR. FM_FETCH_ASSOC return array. FM_FETCH_KEY_PAIR return array but first field
+     *                               in query is key and second is value
+     * @param bool $boolAll - If true return all result else return first result
+     * @return mixed - Result of query
      */
     public function fetch($strFetchMode = FM_FETCH_ASSOC, $boolAll = true)
     {
@@ -61,19 +63,20 @@ class DatabasePdoEngine extends Database
     }
 
     /**
-     * Koristi se kad se radi SELECT count(id), da vrati broj rezultata
+     * Usage if query is like 'SELECT count(id)', return number of result
      *
      * @return int|null
      */
     public function fetchCount()
     {
-        //@TODO - ovo verovatno treba malo prepraviti, ako nema rezultat baca error
+        //@TODO - check this, if have't result have error
         return Numeric::convertToInteger(Arrays::reset($this->getResult()->fetch(\PDO::FETCH_ASSOC)));
     }
 
     /**
-     * Brise rezultate upita
+     * Delete result of query
      *
+     * @return void
      */
     public function free()
     {
@@ -81,7 +84,7 @@ class DatabasePdoEngine extends Database
     }
 
     /**
-     * Vraca poslednji upisani id
+     * Return last insert id
      *
      * @return mixed
      */
@@ -91,7 +94,7 @@ class DatabasePdoEngine extends Database
     }
 
     /**
-     * Vraca broj kolona na koje je uticao prethodni upit
+     * Returns the number of columns affected by the last query
      *
      * @return mixed
      */
@@ -101,7 +104,9 @@ class DatabasePdoEngine extends Database
     }
 
     /**
-     * PDO konekcija na bazu
+     * PDO connect on database
+     *
+     * @return void
      */
     public function connect()
     {
@@ -109,7 +114,7 @@ class DatabasePdoEngine extends Database
         {
             $this->setConnection(new \PDO("mysql:host=" . $this->getHost() . ";dbname=" . $this->getName() . ";charset=" . $this->getCharset(), $this->getUsername(), $this->getPassword()));
 
-            // @TODO - ako konekcija nije uspela upisati u log
+            // @TODO - if not connected put in log
         }
     }
 }

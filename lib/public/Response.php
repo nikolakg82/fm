@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: IMS-WS01
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 2/11/2018
  * Time: 6:13 PM
  */
@@ -15,13 +17,24 @@ use cms\lib\help\Lang;
 
 class Response
 {
+    /**
+     * @var int - Default response code
+     */
     protected $responseCode = 200;
 
+    /**
+     * @var array - Data for display
+     */
     protected $data;
 
+    /**
+     * @var string - Path of template for display
+     */
     protected $templatePath;
 
     /**
+     * Get response code
+     *
      * @return int
      */
     public function getResponseCode()
@@ -30,9 +43,31 @@ class Response
     }
 
     /**
-     * @param int $intResponseCode
+     * Get display data
      *
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get template path
+     *
+     * @return mixed
+     */
+    public function getTemplatePath()
+    {
+        return $this->templatePath;
+    }
+
+    /**
+     * Set response code
+     *
+     * @param int $intResponseCode
      * @return Response
+     * @TODO Add validation to check if response code valid (use 'config/responseCode.php')
      */
     public function setResponseCode($intResponseCode)
     {
@@ -42,16 +77,9 @@ class Response
     }
 
     /**
-     * @return mixed
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * @param mixed
+     * Set response data
      *
+     * @param mixed
      * @return Response
      */
     public function setData($data)
@@ -62,16 +90,9 @@ class Response
     }
 
     /**
-     * @return mixed
-     */
-    public function getTemplatePath()
-    {
-        return $this->templatePath;
-    }
-
-    /**
-     * @param mixed $templatePath
+     * Set template path
      *
+     * @param mixed $templatePath
      * @return Response
      */
     public function setTemplatePath($templatePath)
@@ -81,6 +102,11 @@ class Response
         return $this;
     }
 
+    /**
+     * Call view and display data
+     *
+     * @return void
+     */
     public function showView()
     {
         CMS::$view->assign('data', $this->getData());

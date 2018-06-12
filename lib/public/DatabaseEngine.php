@@ -25,6 +25,7 @@ class DatabaseEngine
      *
      * @param string $strQuery - MYSQL query
      * @param null $mixStatements - Array for prepare statements
+     * @return void
      */
     public function query($strQuery, $mixStatements = null)
     {
@@ -37,7 +38,7 @@ class DatabaseEngine
      *
      * @param string $strFetchMode - Result format. Allowed params is FM_FETCH_ASSOC|FM_FETCH_KEY_PAIR. FM_FETCH_ASSOC return array. FM_FETCH_KEY_PAIR return array but first field
      *                               in query is key and second is value
-     * @param bool $boolAll - if true return all result else return first result
+     * @param bool $boolAll - If true return all result else return first result
      * @return mixed - Result of query
      */
     public function fetch($strFetchMode = FM_FETCH_ASSOC, $boolAll = true)
@@ -47,6 +48,7 @@ class DatabaseEngine
 
     /**
      * Usage if query is like 'SELECT count(id)', return number of result
+     *
      * @return int|null
      */
     public function fetchCount()
@@ -56,6 +58,8 @@ class DatabaseEngine
 
     /**
      * Delete result of query
+     *
+     * @return void
      */
     public function free()
     {
@@ -86,19 +90,23 @@ class DatabaseEngine
      * Set parameter for database and connect it
      *
      * @param $arrConnectData - Params for connection of database
+     * @return void
      */
     public function connect($arrConnectData)
     {
-        $this->engine->setHost($arrConnectData['host']);
-        $this->engine->setUsername($arrConnectData['username']);
-        $this->engine->setPassword($arrConnectData['password']);
-        $this->engine->setName($arrConnectData['name']);
-        $this->engine->connect();
+        $this->engine
+            ->setHost($arrConnectData['host'])
+            ->setUsername($arrConnectData['username'])
+            ->setPassword($arrConnectData['password'])
+            ->setName($arrConnectData['name'])
+            ->connect();
     }
 
     /**
      * Check is PDO installed on the server, if yes make instance of DatabasePdoEngine class
+     *
      * @throws \Exception
+     * @return void
      */
     public function __construct()
     {
