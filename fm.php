@@ -52,6 +52,13 @@ class FM
         return $boolReturn;
     }
 
+    /**
+     * Convert value
+     *
+     * @param $mixValue
+     * @param $strType
+     * @return float|int|null|string
+     */
     public static function convertValue($mixValue, $strType)
     {
         $mixReturn = null;
@@ -71,26 +78,51 @@ class FM
         return $mixReturn;
     }
 
+    /**
+     * Get current server protocol
+     *
+     * @return string
+     */
     public static function getServerProtocol()
     {
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     }
 
+    /**
+     * Get site domain
+     *
+     * @return mixed
+     */
     public static function getSiteDomain()
     {
         return $_SERVER['SERVER_NAME'];
     }
 
+    /**
+     * Get referer link
+     *
+     * @return mixed
+     */
     public static function referer()
     {
         return $_SERVER['HTTP_REFERER'];
     }
 
+    /**
+     * Get request method
+     *
+     * @return mixed
+     */
     public static function requestMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
+    /**
+     * Get custom http header from request
+     * @param $strKey
+     * @return null
+     */
     public static function getCustomHttpHeader($strKey)
     {
         $mixReturn = null;
@@ -101,16 +133,35 @@ class FM
         return $mixReturn;
     }
 
+    /**
+     * Set header
+     *
+     * @param $strHeader
+     * @param bool $boolReplace
+     * @param null $intHttpResponseCode
+     */
     public static function header($strHeader, $boolReplace = true, $intHttpResponseCode = null)
     {
         header($strHeader, $boolReplace, $intHttpResponseCode);
     }
 
+    /**
+     * Redirect
+     *
+     * @param $strUrl
+     * @param int $intResponseCode
+     */
     public static function redirect($strUrl, $intResponseCode = 301)
     {
         self::header("Location: $strUrl", true, $intResponseCode);
     }
 
+    /**
+     * Start session
+     *
+     * @param $strSessionName
+     * @param bool $boolFromCookie
+     */
     public static function startSession($strSessionName, $boolFromCookie = false)
     {
         $boolStartSession = true;
@@ -131,23 +182,51 @@ class FM
         }
     }
 
+    /**
+     * Put data to session
+     *
+     * @param $strKey
+     * @param $strData
+     */
     public static function setSessionData($strKey, $strData)
     {
         $_SESSION[$strKey] = $strData;
     }
 
+    /**
+     * Destroy session
+     *
+     * @param $strKey
+     * @param $strName
+     */
     public static function killSession($strKey, $strName)
     {
         unset($_SESSION[$strKey]);
         self::killCookie($strName);
     }
 
+    /**
+     * Destroy cookie
+     *
+     * @param $strName
+     */
     public static function killCookie($strName)
     {
         self::setCookie($strName, '', time() + 50);
         unset($_COOKIE[$strName]);
     }
 
+    /**
+     * Set cookie
+     *
+     * @param $strName
+     * @param $strValue
+     * @param int $intTimeExpire
+     * @param string $strPath
+     * @param string $strDomain
+     * @param bool $boolSecure
+     * @param bool $boolHttpOnly
+     */
     public static function setCookie($strName, $strValue, $intTimeExpire = 0, $strPath = "/", $strDomain = "", $boolSecure = false, $boolHttpOnly = false)
     {
         setcookie($strName, $strValue, $intTimeExpire, $strPath, $strDomain, $boolSecure, $boolHttpOnly);

@@ -122,6 +122,15 @@ class Image
         return $intReturn;
     }
 
+    /**
+     * Creating parameters for automatically image cropping
+     *
+     * @param $intImageWidth - Original image width
+     * @param $intImageHeight - Original image height
+     * @param $intCropWidth - Cropped image width
+     * @param $intCropHeight - Cropped image height
+     * @return mixed
+     */
     public static function createCropPosition($intImageWidth, $intImageHeight, $intCropWidth, $intCropHeight)
     {
         $arrReturn['start_x'] = 0;

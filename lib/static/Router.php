@@ -1,13 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: IMS-WS01
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 2/24/2018
  * Time: 7:16 PM
  */
 
 namespace fm\lib\help;
-
 
 use cms\CMS;
 use fm\FM;
@@ -29,6 +30,16 @@ class Router
      */
     protected static $routes;
 
+    /**
+     * Add route to register
+     *
+     * @param $strControllerName - Controller of the router
+     * @param $strRoutePath - Route
+     * @param $strFunctionName - Function of the controller to be started
+     * @param $strMethod - Method request
+     * @param int $intPermission - Permission od the route
+     * @throws \Exception
+     */
     public static function addRoute($strControllerName, $strRoutePath, $strFunctionName, $strMethod, $intPermission = CMS_GUEST | CMS_USER | CMS_ADMIN)
     {
         if(self::isRouteExist($strControllerName, $strRoutePath, $strMethod))
@@ -40,16 +51,38 @@ class Router
         );
     }
 
+    /**
+     * Check if route exist
+     *
+     * @param $strControllerName - Controller of the router
+     * @param $strRoutePath - Route
+     * @param $strMethod - Method request
+     * @return bool
+     */
     public static function isRouteExist($strControllerName, $strRoutePath, $strMethod)
     {
         return isset(self::$routes[$strControllerName][$strMethod][$strRoutePath]);
     }
 
+    /**
+     * Get routes from controller and method
+     *
+     * @param $strController
+     * @param $strMethod
+     * @return null
+     */
     public static function getRoutesFromController($strController, $strMethod)
     {
         return isset(self::$routes[$strController][$strMethod]) ? self::$routes[$strController][$strMethod] : null;
     }
 
+    /**
+     * Get details of route
+     *
+     * @param $strController
+     * @param $strPath
+     * @return null
+     */
     public static function getRouteDetails($strController, $strPath)
     {
         $arrRoutes = self::getRoutesFromController($strController, FM::requestMethod());
@@ -140,6 +173,12 @@ class Router
         return $arrReturn;
     }
 
+    /**
+     * Get route params data
+     *
+     * @param $strParam
+     * @return mixed
+     */
     public static function getParamsData($strParam)
     {
         $arrReturn['name'] = $strParam;
@@ -264,6 +303,13 @@ class Router
         return $strRegex;
     }
 
+    /**
+     * Get values of params
+     *
+     * @param $strPath
+     * @param $strRoute
+     * @return null
+     */
     public static function getParamsDataValue($strPath, $strRoute)
     {
         $arrReturn = null;
