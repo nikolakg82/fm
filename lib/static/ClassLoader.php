@@ -13,25 +13,27 @@ use fm\FM;
 class ClassLoader
 {
     /**
-     * @var array - Registar klasa
-     * Tip niza je array(
-     *                   'Naziv klase' => array(
-     *                                          'path'  => 'putanja do fajla',
-     *                                          'parent'=> 'Klasa koja se nasledjuje, ako postoji'
+     * @var array - Class registry
+     *
+     * Example: array(
+     *                   'Class name' => array(
+     *                                          'path'  => 'Path to the file',
+     *                                          'parent'=> 'Parent class, if exist'
      *                                          'type'  => 'public|abstract'
-     *                                          'interfaces' => array() - niz sa nazivima interface-a
-     *                                          'traits'     => array() - niz sa nazivima trait-a
+     *                                          'interfaces' => array() - array with interfaces name
+     *                                          'traits'     => array() - array with traits name
      *                                          ),
      *                  );
      */
     protected static $classData;
 
     /**
-     * @var - Registar staticnih klasa
-     * Tip niza je array(
-     *                   'Naziv klase' => array(
-     *                                          'path'  => 'putanja do fajla',
-     *                                          'parent'=> 'Klasa koja se nasledjuje, ako postoji'
+     * @var - Registry static class
+     *
+     * Example: array(
+     *                   'Class name' => array(
+     *                                          'path'  => 'Path to the file',
+     *                                          'parent'=> 'Parent class, if exist'
      *                                          ),
      *                  );
      */
@@ -43,9 +45,9 @@ class ClassLoader
      * @param $strClassName - Class name
      * @param $strClassPath - Path to class file
      * @param string $strClassType - Type of class (static|public|abstract)
-     * @param null $strClassParent
-     * @param array $arrInterfaces
-     * @param array $arrTraits
+     * @param null $strClassParent - Parent class
+     * @param array $arrInterfaces - Array with interfaces
+     * @param array $arrTraits - Array with traits
      * @throws \Exception
      */
     public static function addClass($strClassName, $strClassPath, $strClassType = 'static', $strClassParent = null, $arrInterfaces = [], $arrTraits = [])
@@ -53,39 +55,38 @@ class ClassLoader
         if($strClassType == 'static' || $strClassType == 'public' || $strClassType == 'abstract')
         {
             if(!file_exists($strClassPath))
-                throw new \Exception("Fajl $strClassPath ne postoji, $strClassName klasa se ne moze registrovati");
-
+                throw new \Exception("File $strClassPath does not exist, $strClassName class can not be registered");
 
             if($strClassType == 'public' || $strClassType == 'abstract')
             {
                 if(isset($strClassParent) && !(self::existClass($strClassParent)))
-                    throw new \Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
+                    throw new \Exception("Class $strClassParent does not exist in registry and can't be parent of class $strClassName");
 
                 if(self::existClass($strClassName))
-                    throw new \Exception("Klasa $strClassName je vec registrovana i ne moze se ponovo registrovati");
+                    throw new \Exception("Class $strClassName is already registered, can't registry again");
 
                 self::$classData[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent, 'type' => $strClassType, 'interfaces' => $arrInterfaces, 'traits' => $arrTraits);
             }
             else
             {
                 if(isset($strClassParent) && !(self::existStaticClass($strClassParent)))
-                    throw new \Exception("Klasa $strClassParent se ne nalazi u registru klasa i ne moze biti parent klasi $strClassName");
+                    throw new \Exception("Class $strClassParent does not exist in registry and can't be parent of class $strClassName");
 
                 if(self::existStaticClass($strClassName))
-                    throw new \Exception("Staticna klasa $strClassName je vec registrovana i nemo ze se ponovo registrovati");
+                    throw new \Exception("Static class $strClassName is already registered, can't registry again");
 
                 self::$staticClass[$strClassName] = array('path' => $strClassPath, 'parent' => $strClassParent);
             }
         }
         else
-            throw new \Exception("Tip klase $strClassType nije podrzan, porzani tipovi su static|public");
+            throw new \Exception("Type of class $strClassType is not supported, supported class types are static|public");
 
     }
 
     /**
-     * Provera da li je klasa dodata
+     * Check if class exist
      *
-     * @param string $strClassName - Naziv klase
+     * @param string $strClassName - Class name
      * @return bool - Status
      */
     public static function existClass($strClassName)
@@ -99,9 +100,9 @@ class ClassLoader
     }
 
     /**
-     * Provera da li je staticna klasa dodata
+     * Check if static class exist
      *
-     * @param string $strClassName - Naziv klase
+     * @param string $strClassName - Class name
      * @return bool - Status
      */
     public static function existStaticClass($strClassName)
@@ -115,16 +116,16 @@ class ClassLoader
     }
 
     /**
-     * Includovanje klase
+     * Load class
      *
-     * @param string $strClassName - Naziv klase
+     * @param string $strClassName - Class name
      * @throws \Exception
      * @return object
      */
     public static function load($strClassName)
     {
         if(!self::existClass($strClassName))
-            throw new \Exception("Klasa $strClassName nije registrovana, klase se ne moze includovati");
+            throw new \Exception("Class $strClassName is not registered, class can not be loaded");
 
         if(isset(self::$classData[$strClassName]['parent']))
             self::load(self::$classData[$strClassName]['parent']);
@@ -143,16 +144,15 @@ class ClassLoader
 
         FM::includer(self::$classData[$strClassName]['path']);
 
-        //@TODO proveri da li treba da ide istanciranje uvek ili samo trazene klase, ako se extenduje klasa koja nije
-        // abstraktna onda ce da se istancira i ona kao prant klasa sto u sustini i nije potrebno
+        //@TODO check whether the trend is always to go out, or only the requested class, if a class that is not
+        // abstract is extending then it will be expelled, and it as a prant class is essentially what is needed
 
         if(self::$classData[$strClassName]['type'] == 'public')
             return new $strClassName();
     }
 
     /**
-     * Includovanje staticnih klasa iz registra
-     *
+     * Load all static class
      */
     public static function loadStaticClass()
     {
