@@ -1,11 +1,16 @@
 <?php
 
 /**
- * Ovde se definisu sve konstante
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 4/6/2016
+ * Time: 2:49 PM
  */
 
 /**
- * Putanje do foldera
+ * Path to folders
  */
     define('FM_LIB',            FM_ROOT         . "lib/");
     define('FM_ABSTRACT',       FM_LIB          . "abstract/");
@@ -17,7 +22,7 @@
     define('FM_CONFIG',         FM_ROOT         . "config/");
 
 /**
- *  Tipovi varijabli
+ *  Type of variables
  */
     define('FM_STRING',         'string');
     define('FM_INTEGER',        'integer');
@@ -27,7 +32,7 @@
     define('FM_REQUIRED' ,      'required');
 
 /**
- * Hederi
+ * Headers
  */
     define('FM_POST',           'POST');
     define('FM_GET',            'GET');
@@ -38,14 +43,14 @@
     define('FM_FILES',          'files');
 
 /**
- * Tipovi prikaza
+ * Type of views
  */
     define('FM_HTML',           'html');
     define('FM_RSS',            'rss');
     define('FM_JSON',           'json');
 
 /**
- * Tipovi polja
+ * Type of fields
  */
     define('FM_AUTO',           'auto');
     define('FM_MLC',            'mlc');
@@ -58,7 +63,7 @@
     define('FM_SELECT',         'select');
 
 /**
- * Ostale konstante
+ * Other constants
  */
     define('FM_FETCH_ASSOC',    'fetch_assoc');// Rezultat da bude asocijaticni niz
     define('FM_FETCH_KEY_PAIR', 'fetch_key_pair');// Rezultat da bude u formatu kljuc => vrednost

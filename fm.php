@@ -1,7 +1,7 @@
 <?php
 
 /**
- * FM glavna klasa
+ * FM Main class
  *
  * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
  * @link http://www.nikolamilenkovic.com
@@ -21,11 +21,11 @@ use fm\lib\help\Stringer;
 class FM
 {
     /**
-     * Radi php include fajla
+     * Include php file
      *
-     * @param string $strPath - putanja do fajla
-     * @param bool $boolOnce - includovanje samo jednom ili vise puta
-     * @return mixed - Vraca includovan fajl, ako ima return u njemu
+     * @param string $strPath - Path to the file
+     * @param bool $boolOnce - Include once or multi time
+     * @return mixed - Value of included file
      */
     public static function includer($strPath, $boolOnce = true)
     {
@@ -41,7 +41,7 @@ class FM
      * @param $mixData
      * @return bool
      *
-     * @deprecated - metoda treba da se izbaci
+     * @deprecated - Method is deprecated, need to be removed
      */
     public static function is_variable($mixData)
     {
@@ -52,6 +52,13 @@ class FM
         return $boolReturn;
     }
 
+    /**
+     * Convert value
+     *
+     * @param $mixValue
+     * @param $strType
+     * @return float|int|null|string
+     */
     public static function convertValue($mixValue, $strType)
     {
         $mixReturn = null;
@@ -71,41 +78,95 @@ class FM
         return $mixReturn;
     }
 
+    /**
+     * Get current server protocol
+     *
+     * @return string
+     */
     public static function getServerProtocol()
     {
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     }
 
+    /**
+     * Get site domain
+     *
+     * @return mixed
+     */
     public static function getSiteDomain()
     {
         return $_SERVER['SERVER_NAME'];
     }
 
+    /**
+     * Get referer link
+     *
+     * @return mixed
+     */
     public static function referer()
     {
         return $_SERVER['HTTP_REFERER'];
     }
 
+    /**
+     * Get request method
+     *
+     * @return mixed
+     */
     public static function requestMethod()
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
+    /**
+     * Get custom http header from request
+     * @param $strKey
+     * @return null
+     */
+    public static function getCustomHttpHeader($strKey)
+    {
+        $mixReturn = null;
+
+        if(isset($_SERVER['HTTP_' . Stringer::uppercase($strKey)]))
+            $mixReturn = $_SERVER['HTTP_' . Stringer::uppercase($strKey)];
+
+        return $mixReturn;
+    }
+
+    /**
+     * Set header
+     *
+     * @param $strHeader
+     * @param bool $boolReplace
+     * @param null $intHttpResponseCode
+     */
     public static function header($strHeader, $boolReplace = true, $intHttpResponseCode = null)
     {
         header($strHeader, $boolReplace, $intHttpResponseCode);
     }
 
+    /**
+     * Redirect
+     *
+     * @param $strUrl
+     * @param int $intResponseCode
+     */
     public static function redirect($strUrl, $intResponseCode = 301)
     {
         self::header("Location: $strUrl", true, $intResponseCode);
     }
 
+    /**
+     * Start session
+     *
+     * @param $strSessionName
+     * @param bool $boolFromCookie
+     */
     public static function startSession($strSessionName, $boolFromCookie = false)
     {
         $boolStartSession = true;
 
-        // @TODO - ovaj if ispitati, sta mu je poenta
+        // @TODO - check point of this condition
         if($boolFromCookie)
         {
             $strDataTemp = Request::cookie($strSessionName);
@@ -121,23 +182,51 @@ class FM
         }
     }
 
+    /**
+     * Put data to session
+     *
+     * @param $strKey
+     * @param $strData
+     */
     public static function setSessionData($strKey, $strData)
     {
         $_SESSION[$strKey] = $strData;
     }
 
+    /**
+     * Destroy session
+     *
+     * @param $strKey
+     * @param $strName
+     */
     public static function killSession($strKey, $strName)
     {
         unset($_SESSION[$strKey]);
         self::killCookie($strName);
     }
 
+    /**
+     * Destroy cookie
+     *
+     * @param $strName
+     */
     public static function killCookie($strName)
     {
         self::setCookie($strName, '', time() + 50);
         unset($_COOKIE[$strName]);
     }
 
+    /**
+     * Set cookie
+     *
+     * @param $strName
+     * @param $strValue
+     * @param int $intTimeExpire
+     * @param string $strPath
+     * @param string $strDomain
+     * @param bool $boolSecure
+     * @param bool $boolHttpOnly
+     */
     public static function setCookie($strName, $strValue, $intTimeExpire = 0, $strPath = "/", $strDomain = "", $boolSecure = false, $boolHttpOnly = false)
     {
         setcookie($strName, $strValue, $intTimeExpire, $strPath, $strDomain, $boolSecure, $boolHttpOnly);

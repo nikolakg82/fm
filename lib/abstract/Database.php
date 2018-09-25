@@ -1,8 +1,12 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * Main database class
+ *
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 4/28/2016
  * Time: 12:23 PM
  */
@@ -19,38 +23,38 @@ abstract class Database implements DatabaseEngine
     protected $host;
 
     /**
-     * @var - Naziv baze
+     * @var - name of database
      */
     protected $name;
 
     /**
-     * @var - Korisnicko ime
+     * @var - Username
      */
     protected $username;
 
     /**
-     * @var - Sifra
+     * @var - Password
      */
     protected $password;
 
     /**
-     * @var - Istanca konekcija na bazu
+     * @var - Instance of connection on database
      */
     protected $connection;
 
     /**
-     * @var string - Karakter set
+     * @var string - Character set
      */
     protected $charset = "utf8";
 
     /**
-     * @var - Rezultat upita
+     * @var - Result from query
      */
     protected $result;
 
 
     /**
-     * Craca host name
+     * Getter hostname
      *
      * @return mixed
      */
@@ -60,7 +64,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca naziv baze
+     * Getter name of database
      *
      * @return mixed
      */
@@ -70,7 +74,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca korisnicko ime
+     * Getter username
      *
      * @return mixed
      */
@@ -80,7 +84,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca siftu
+     * Getter password
      *
      * @return mixed
      */
@@ -90,7 +94,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca konekciju
+     * Getter connection on database
      *
      * @return mixed
      */
@@ -100,7 +104,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca karakter set
+     * Getter character set
      *
      * @return string
      */
@@ -110,7 +114,7 @@ abstract class Database implements DatabaseEngine
     }
 
     /**
-     * Vraca rezultat upita
+     * Getter result of query
      *
      * @return mixed
      */
@@ -121,77 +125,98 @@ abstract class Database implements DatabaseEngine
 
 
     /**
-     * Setuje host name
+     * Set hostname
      *
-     * @param $strHost
+     * @param string $strHost
+     * @return Database
      */
     public function setHost($strHost)
     {
         $this->host = $strHost;
+
+        return $this;
     }
 
     /**
-     * Setuje naziv baze
+     * Set name of database
      *
-     * @param $strName
+     * @param string $strName
+     * @return Database
      */
     public function setName($strName)
     {
         $this->name = $strName;
+
+        return $this;
     }
 
     /**
-     * Setuje korisnicko ime
+     * Set username
      *
-     * @param $strUsername
+     * @param string $strUsername
+     * @return Database
      */
     public function setUsername($strUsername)
     {
         $this->username = $strUsername;
+
+        return $this;
     }
 
     /**
-     * Setuje sifru
+     * Set password
      *
-     * @param $strPassword
+     * @param string $strPassword
+     * @return $this
      */
     public function setPassword($strPassword)
     {
         $this->password = $strPassword;
+
+        return $this;
     }
 
     /**
-     * Setuje karakter set
+     * Set character set
      *
-     * @param $strCharset
+     * @param string $strCharset
+     * @return $this
      */
     public function setCharset($strCharset)
     {
         $this->charset = $strCharset;
+
+        return $this;
     }
 
     /**
-     * Setuje rezultat upita
+     * Set result of query
      *
-     * @param $mixData
+     * @param mixed $mixData
+     * @return $this
      */
     public function setResult($mixData)
     {
         $this->result = $mixData;
+
+        return $this;
     }
 
     /**
-     * Setuje konekciju na bazu
+     * Set connection on database
      *
-     * @param $objConnection
+     * @param object $objConnection
+     * @return $this
      */
     public function setConnection($objConnection)
     {
         $this->connection = $objConnection;
+
+        return $this;
     }
 
     /**
-     * Proverava da li postoji konekcija na bazu
+     * Check if already connected on database, if yes return true
      *
      * @return bool
      */

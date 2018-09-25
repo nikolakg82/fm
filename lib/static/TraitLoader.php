@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 2/16/2018
  * Time: 1:40 PM
  */
@@ -24,6 +26,13 @@ class TraitLoader
      */
     protected static $data;
 
+    /**
+     * Add trait to register
+     *
+     * @param $strName - Name of the trait
+     * @param $strPath - Path to the trait
+     * @throws \Exception
+     */
     public static function addItem($strName, $strPath)
     {
         if(!isset($strName))
@@ -41,14 +50,26 @@ class TraitLoader
         self::$data[$strName]['path'] = $strPath;
     }
 
+    /**
+     * Load trait
+     *
+     * @param $strName - Name of the trait
+     * @throws \Exception
+     */
     public static function load($strName)
     {
         if(!self::issetItem($strName))
-            throw new \Exception("Trait $strName not exist. Can't load interface.");
+            throw new \Exception("Trait $strName not exist. Can't load trait.");
 
         FM::includer(self::$data[$strName]['path']);
     }
 
+    /**
+     * Check if trait registered
+     *
+     * @param $strName - name of the trait
+     * @return bool
+     */
     public static function issetItem($strName)
     {
         $boolReturn = false;

@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 2/14/2018
  * Time: 1:34 PM
  */
@@ -25,6 +27,14 @@ class InterfaceLoader
      */
     protected static $data;
 
+    /**
+     * Add interface to register
+     *
+     * @param $strName - Name of interface
+     * @param $strPath - Path to the interface
+     * @param null $strParent - Name of interface parent
+     * @throws \Exception
+     */
     public static function addItem($strName, $strPath, $strParent = null)
     {
         if(!isset($strName))
@@ -51,6 +61,12 @@ class InterfaceLoader
 
     }
 
+    /**
+     * Load interface
+     *
+     * @param $strName - Name of interface
+     * @throws \Exception
+     */
     public static function load($strName)
     {
         if(!self::issetItem($strName))
@@ -62,6 +78,12 @@ class InterfaceLoader
         FM::includer(self::$data[$strName]['path']);
     }
 
+    /**
+     * Check if interface registered
+     *
+     * @param $strName - Name of interface
+     * @return bool
+     */
     public static function issetItem($strName)
     {
         $boolReturn = false;
